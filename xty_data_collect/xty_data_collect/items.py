@@ -11,4 +11,17 @@ import scrapy
 class XtyDataCollectItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
+    pub = scrapy.Field()
+    p_time = scrapy.Field()
+    content = scrapy.Field()
     title = scrapy.Field()
+    appendix = scrapy.Field()
+    symbol = scrapy.Field()
+    region = scrapy.Field()
+    website = scrapy.Field()
+    link = scrapy.Field()
+    spider_name =scrapy.Field()
+    txt =scrapy.Field()
+    appendix_name=scrapy.Field()
+    module_name =scrapy.Field()
+    city =scrapy.Field()

@@ -54,3 +54,10 @@ def dispose_moncht(scrmonth):
     else:
         month = result
     return month
+
+
+def get_content_css():
+    content_css =[
+        'mainContainer',
+    ]
+    return content_css
