@@ -7,19 +7,19 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 
 from HY_NEWS.items import HyNewsItem
-from HY_NEWS.util_custom.tools.attachment import get_content_css, get_times
+from HY_NEWS.util_custom.tools.attachment import get_times
 from HY_NEWS.util_custom.tools.cate import get_category
 
 
-class GyNewsSpider(CrawlSpider):
-    name = 'GY_News'
-    allowed_domains = ['www.indunet.net.cn']
-    start_urls = ['http://www.indunet.net.cn/news/']
+class JswSpider(CrawlSpider):
+    name = 'JSw'
+    allowed_domains = ['www.ometal.com']
+    start_urls = ['http://www.ometal.com/bin/new/more.asp?t=4&pos=2897966&act=next&page=1','http://www.ometal.com/bin/new/more.asp?t=5&pos=2899855&act=next&page=1']
     custom_settings = {
         # 并发请求
-        'CONCURRENT_REQUESTS':10,
-        # 'CONCURRENT_REQUESTS_PER_DOMAIN': 1000000,
-        'CONCURRENT_REQUESTS_PER_IP':0,
+        'CONCURRENT_REQUESTS': 10,
+        # 'CONCURRENT_REQUESTS_PER_DOMAIN':0,
+        'CONCURRENT_REQUESTS_PER_IP': 0,
         # 下载暂停
         'DOWNLOAD_DELAY': 0.5,
         'ITEM_PIPELINES': {
@@ -36,7 +36,7 @@ class GyNewsSpider(CrawlSpider):
             # 设置设置默认代理
             'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 700,
             # 设置请求代理服务器
-            'HY_NEWS.util_custom.middleware.middlewares.ProxyMiddleWare': 100,
+            # 'HY_NEWS.util_custom.middleware.middlewares.ProxyMiddleWare': 100,
             # 设置scrapy 自带请求头
             'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
             # 自定义随机请求头
@@ -56,8 +56,8 @@ class GyNewsSpider(CrawlSpider):
         # 'SPLASH_URL': "http://127.0.0.1:8050/"
     }
     rules = (
-        Rule(LinkExtractor(restrict_css='.navbar  a'), follow=True),
-        Rule(LinkExtractor(restrict_css='.divcon  a'), callback='parse_item', follow=True),
+        # Rule(LinkExtractor(restrict_css='.index_top_01  a'), follow=True),
+        Rule(LinkExtractor(restrict_css='.s105 a'), callback='parse_item', follow=True),
     )
 
     def parse_item(self, response):
@@ -69,9 +69,9 @@ class GyNewsSpider(CrawlSpider):
         txt = result['content']
         p_time = result['publish_time']
         lyurl = response.url
-        lyname = '中国工业网'
+        lyname = '全球金属网'
         content_css = [
-            '.content-text',
+            '#fontzoom',
         ]
         for content in content_css:
             content = ''.join(response.css(content).extract())
@@ -79,12 +79,12 @@ class GyNewsSpider(CrawlSpider):
                 break
             if not content:
                 logging.warning(f'{response.url}' + '当前url无 css 适配未提取 centent')
-        classify, codes, region = get_category(txt)
+        classify, codes, region = get_category(title)
         item['title'] = title
         item['txt'] = txt
         item['p_time'] = get_times(p_time)
         item['content'] = content
-        item['spider_name'] = 'GY_News'
+        item['spider_name'] = 'JSw'
         item['module_name'] = '行业新闻'
         item['cate'] = classify
         item['region'] = region

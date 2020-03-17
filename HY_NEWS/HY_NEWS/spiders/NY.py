@@ -7,19 +7,25 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
 
 from HY_NEWS.items import HyNewsItem
-from HY_NEWS.util_custom.tools.attachment import get_content_css, get_times
+from HY_NEWS.util_custom.tools.attachment import get_times
 from HY_NEWS.util_custom.tools.cate import get_category
 
 
-class GyNewsSpider(CrawlSpider):
-    name = 'GY_News'
-    allowed_domains = ['www.indunet.net.cn']
-    start_urls = ['http://www.indunet.net.cn/news/']
+class NySpider(CrawlSpider):
+    name = 'NY'
+    allowed_domains = ['www.in-en.com','www.china-nengyuan.com','www.chinaoilonline.com']
+    start_urls = [
+                  # 'http://www.china-nengyuan.com/news/news_list_1.html',
+                  # 'https://www.in-en.com/article/news/intl/',
+                  # 'https://www.in-en.com/article/news/china/',
+                  # 'https://www.in-en.com/article/news/china/',
+                  'http://www.chinaoilonline.com/article.do?method=toArticleListByType2ByTypeidList&p1=15&p1=16&p1=17&p1=18&pageNo=1&pageSize=22&pid=2&subLanmuId=2&rightshow=&typeid=23&titleLength=30'
+                  ]#https://www.in-en.com/article/news/intl/','https://www.in-en.com/article/news/china/',
     custom_settings = {
         # 并发请求
-        'CONCURRENT_REQUESTS':10,
+        'CONCURRENT_REQUESTS': 10,
         # 'CONCURRENT_REQUESTS_PER_DOMAIN': 1000000,
-        'CONCURRENT_REQUESTS_PER_IP':0,
+        'CONCURRENT_REQUESTS_PER_IP': 0,
         # 下载暂停
         'DOWNLOAD_DELAY': 0.5,
         'ITEM_PIPELINES': {
@@ -36,7 +42,7 @@ class GyNewsSpider(CrawlSpider):
             # 设置设置默认代理
             'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 700,
             # 设置请求代理服务器
-            'HY_NEWS.util_custom.middleware.middlewares.ProxyMiddleWare': 100,
+            # 'HY_NEWS.util_custom.middleware.middlewares.ProxyMiddleWare': 100,
             # 设置scrapy 自带请求头
             'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
             # 自定义随机请求头
@@ -56,8 +62,10 @@ class GyNewsSpider(CrawlSpider):
         # 'SPLASH_URL': "http://127.0.0.1:8050/"
     }
     rules = (
-        Rule(LinkExtractor(restrict_css='.navbar  a'), follow=True),
-        Rule(LinkExtractor(restrict_css='.divcon  a'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(restrict_css='div.bd > ul:nth-child(1) > div > a:nth-child(14) '), follow=True),
+        Rule(LinkExtractor(restrict_css='.imgBox a '), callback='parse_item', follow=True),
+        Rule(LinkExtractor(restrict_css='.member_tr_row a '), callback='parse_item', follow=True),
+        Rule(LinkExtractor(restrict_css='.zxwk_li a'), callback='parse_item', follow=True),
     )
 
     def parse_item(self, response):
@@ -69,9 +77,12 @@ class GyNewsSpider(CrawlSpider):
         txt = result['content']
         p_time = result['publish_time']
         lyurl = response.url
-        lyname = '中国工业网'
+        lyname = '能源'
         content_css = [
-            '.content-text',
+            '#content',
+            '.news_link',
+            '#zxwk_left_1'
+
         ]
         for content in content_css:
             content = ''.join(response.css(content).extract())
@@ -84,7 +95,7 @@ class GyNewsSpider(CrawlSpider):
         item['txt'] = txt
         item['p_time'] = get_times(p_time)
         item['content'] = content
-        item['spider_name'] = 'GY_News'
+        item['spider_name'] = 'NY'
         item['module_name'] = '行业新闻'
         item['cate'] = classify
         item['region'] = region

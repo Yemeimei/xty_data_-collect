@@ -19,7 +19,7 @@ class HySpider(CrawlSpider):
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
-        'CONCURRENT_REQUESTS_PER_DOMAIN': 1000000000,
+        # 'CONCURRENT_REQUESTS_PER_DOMAIN': 1000000000,
         'CONCURRENT_REQUESTS_PER_IP':0,
         # 下载暂停
         'DOWNLOAD_DELAY': 0.5,
