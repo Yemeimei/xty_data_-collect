@@ -62,6 +62,10 @@ class MysqlTwistedPipeline(object):
         logging.warning(datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S') + '----' + str(failure) + '\n')
 
     def do_insert(self, cursor, item):
+        '''
+        异步入库方式
+
+        '''
         try:
             sql = '''
                         insert ignore into `topic_info_tax_policy`(`title`, `article_num`,`content`,`appendix`,

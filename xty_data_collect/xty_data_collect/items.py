@@ -9,8 +9,7 @@ import scrapy
 
 
 class XtyDataCollectItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
+    #根据入库数据构建 itme
     pub = scrapy.Field()
     p_time = scrapy.Field()
     content = scrapy.Field()

@@ -24,6 +24,11 @@ class DemoSpider(scrapy.Spider):
             # 'investment_news.pipelines.DuplicatesPipeline': 200,
         },
         'DOWNLOADER_MIDDLEWARES': {
+            # 调用 scrapy_splash 打开此设置
+            # 'scrapy_splash.SplashCookiesMiddleware': 723,
+            # 'scrapy_splash.SplashMiddleware': 725,
+
+
             #设置设置默认代理
             'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 700,
             #设置请求代理服务器
@@ -37,7 +42,14 @@ class DemoSpider(scrapy.Spider):
             #重试中间件
             'xty_data_collect.util_custom.middleware.middlewares.MyRetryMiddleware': 90,
         },
-
+        # 调用 scrapy_splash 打开此设置
+        # 'SPIDER_MIDDLEWARES': {
+        #     'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+        # },
+        #去重/api端口
+        # 'DUPEFILTER_CLASS': 'scrapy_splash.SplashAwareDupeFilter',
+        # # 'SPLASH_URL': "http://10.8.32.122:8050/"
+        # 'SPLASH_URL': "http://127.0.0.1:8050/"
     }
 
     # def start_requests(self):
