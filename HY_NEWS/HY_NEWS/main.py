@@ -1,1 +1,1 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-from  scrapy.cmdline import executeexecute('scrapy crawl HY'.split())

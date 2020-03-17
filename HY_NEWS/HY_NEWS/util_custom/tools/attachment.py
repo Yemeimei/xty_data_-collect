@@ -61,6 +61,11 @@ def dispose_moncht(scrmonth):
 
 def get_content_css():
     content_css =[
-        'mainContainer',
-    ]
+        '.TRS_Editor',
+        '.detail_content',
+        '.block_left',
+        '.detail_content',
+        '.content-text',
+
+            ]
     return content_css

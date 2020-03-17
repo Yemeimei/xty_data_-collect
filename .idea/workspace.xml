@@ -3,10 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="6625ea44-e3c4-4eca-bcdc-b1d5a28c2c3f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/xty_data.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/xty_data.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xty_data_collect/xty_data_collect/pipelines.py" beforeDir="false" afterPath="$PROJECT_DIR$/xty_data_collect/xty_data_collect/pipelines.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/xty_data_collect/xty_data_collect/spiders/demo.py" beforeDir="false" afterPath="$PROJECT_DIR$/xty_data_collect/xty_data_collect/spiders/demo.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HY_NEWS/.idea/HY_NEWS.iml" beforeDir="false" afterPath="$PROJECT_DIR$/HY_NEWS/.idea/HY_NEWS.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HY_NEWS/HY_NEWS/items.py" beforeDir="false" afterPath="$PROJECT_DIR$/HY_NEWS/HY_NEWS/items.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HY_NEWS/HY_NEWS/pipelines.py" beforeDir="false" afterPath="$PROJECT_DIR$/HY_NEWS/HY_NEWS/pipelines.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HY_NEWS/HY_NEWS/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/HY_NEWS/HY_NEWS/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HY_NEWS/HY_NEWS/spiders/HY.py" beforeDir="false" afterPath="$PROJECT_DIR$/HY_NEWS/HY_NEWS/spiders/HY.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HY_NEWS/HY_NEWS/util_custom/tools/attachment.py" beforeDir="false" afterPath="$PROJECT_DIR$/HY_NEWS/HY_NEWS/util_custom/tools/attachment.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,6 +78,8 @@
       <updated>1584368589275</updated>
       <workItem from="1584368591320" duration="53000" />
       <workItem from="1584368674764" duration="4868000" />
+      <workItem from="1584458173417" duration="387000" />
+      <workItem from="1584459506142" duration="3384000" />
     </task>
     <servers />
   </component>

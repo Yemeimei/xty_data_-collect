@@ -22,7 +22,9 @@ class ProxyMiddleWare(object):
     """docstring for ProxyMiddleWare"""
     def process_request(self, request, spider):
         '''对request对象加上proxy'''
+
         proxy = self.get_random_proxy()
+        logger.warning('当前代理:'+f'{proxy}')
         try:
             request.meta['splash']['args']['proxy'] = 'http://' + proxy
         except:
