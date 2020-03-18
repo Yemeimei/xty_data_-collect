@@ -7,14 +7,14 @@ import logging
 
 from scrapy.spiders import CrawlSpider, Rule
 
-from HYXH.items import HyNewsItem
-from HYXH.util_custom.tools.attachment import get_content_css, get_attachments, get_times
-from HYXH.util_custom.tools.cate import get_category
+# from HYXH.items import HyNewsItem
+# from HYXH.util_custom.tools.attachment import get_content_css, get_attachments, get_times
+# from HYXH.util_custom.tools.cate import get_category
 
 
 class HySpider(CrawlSpider):
     name = 'SH_biomedical'
-    allowed_domains = ['www.sbia.org.cn/']
+    allowed_domains = ['www.sbia.org.cn']
     start_urls = ['http://www.sbia.org.cn/news.aspx?newscateid=15&IntroCateId=15&page=1']
     custom_settings = {
         # 并发请求
@@ -60,25 +60,25 @@ class HySpider(CrawlSpider):
         # pass
 
     rules = (
-        Rule(LinkExtractor(restrict_css='.sedivnewsrenke a'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(restrict_css='.sedivnewsrenke '), callback='parse_items', follow=True),
     )
 
     def parse_items(self, response):
         # item =HyNewsItem()
         resp = response.text
-        print(resp)
-        # extractor = GeneralNewsExtractor()
-        # result = extractor.extract(resp, with_body_html=False)
-        # title = result['title']
-        # txt = result['content']
-        # p_time = result['publish_time']
-        # content_css = [
-        #     '.TRS_Editor',
-        #     '.detail_content',
-        #     '.block_left',
-        #     '.detail_content',
-        #     '.content-text',
-        # ]
+        extractor = GeneralNewsExtractor()
+        result = extractor.extract(resp, with_body_html=False)
+        print(result)
+        title = result['title']
+        txt = result['content']
+        p_time = result['publish_time']
+        content_css = [
+            '.TRS_Editor',
+            '.detail_content',
+            '.block_left',
+            '.detail_content',
+            '.content-text',
+        ]
         # lyurl = response.url
         # lyname = '中国工业新闻网'
         # for content in content_css:
