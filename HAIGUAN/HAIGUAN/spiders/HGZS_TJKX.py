@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 import scrapy
+import logging
 
 
 class HgzsTjkxSpider(scrapy.Spider):
     name = 'HGZS_TJKX'
     # allowed_domains = ['http://www.customs.gov.cn/customs/302249/302274/302275/index.html']
-    start_urls = ['http://http://www.customs.gov.cn/customs/302249/302274/302275/index.html']
+    start_urls = [
+        'http://www.customs.gov.cn/customs/302249/302274/302275/index.html']
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
@@ -48,5 +50,6 @@ class HgzsTjkxSpider(scrapy.Spider):
     }
 
     def parse(self, response):
-        logging.warning('正文获取失败,请检查')
+        page_count = int(response.css('input[name=article_paging_list_hidden]::attr(totalpage)').extract_first())
+        logging.warning('正文获取失败,请检查' + str(page_count))
         pass
