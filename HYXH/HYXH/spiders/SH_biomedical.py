@@ -2,20 +2,21 @@
 import scrapy
 from scrapy.linkextractors import LinkExtractor
 from gne import GeneralNewsExtractor
-
+import re
 import logging
 
 from scrapy.spiders import CrawlSpider, Rule
 
-# from HYXH.items import HyNewsItem
-# from HYXH.util_custom.tools.attachment import get_content_css, get_attachments, get_times
-# from HYXH.util_custom.tools.cate import get_category
+from HYXH.items import HyxhItem
+from HYXH.util_custom.tools.attachment import get_attachments, get_times
 
 
 class HySpider(CrawlSpider):
     name = 'SH_biomedical'
     allowed_domains = ['www.sbia.org.cn']
-    start_urls = ['http://www.sbia.org.cn/news.aspx?newscateid=15&IntroCateId=15&page=1']
+    start_urls = [
+        f'http://www.sbia.org.cn/news.aspx?newscateid=15&IntroCateId=15&BaseInfoCateId=15&cateid=15&ViewCateID=15&aboutidx=3&page={x}'
+        for x in range(1, 158)]
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
@@ -64,40 +65,36 @@ class HySpider(CrawlSpider):
     )
 
     def parse_items(self, response):
-        # item =HyNewsItem()
-        resp = response.text
         extractor = GeneralNewsExtractor()
+        resp = response.text
         result = extractor.extract(resp, with_body_html=False)
-        print(result)
+
         title = result['title']
         txt = result['content']
-        p_time = result['publish_time']
+        time = get_times(''.join(response.xpath('/html/body/div[4]/div/div/div[2]/div[3]/div[2]//text()').extract()))
+        item = HyxhItem()
         content_css = [
-            '.TRS_Editor',
-            '.detail_content',
-            '.block_left',
-            '.detail_content',
-            '.content-text',
+            '.contenttext'
         ]
-        # lyurl = response.url
-        # lyname = '中国工业新闻网'
-        # for content in content_css:
-        #     content =''.join(response.css(content).extract())
-        #     if content:
-        #         break
-        #     if not content:
-        #         logging.warning(f'{response.url}'+'当前url无 css 适配未提取 centent')
-        # classify, codes, region =get_category(txt)
-        # item['title'] = title
-        # item['txt'] = txt
-        # item['p_time'] = get_times(p_time)
-        # item['content'] = content
-        # item['spider_name'] = 'HY'
-        # item['module_name'] = '行业新闻'
-        # item['cate'] =classify
-        # item['region'] =region
-        # item['code'] =codes
-        # item['link'] =lyurl
-        # item['website'] =lyname
-        # if content:
-        #     yield item
+        lyurl = response.url
+        for content in content_css:
+            content = ''.join(response.css(content).extract())
+            if content:
+                break
+            if not content:
+                logging.warning(f'{response.url}' + '当前url无 css 适配未提取 centent')
+        item['title'] = title
+        appendix, appendix_name = get_attachments(response)
+        item['appendix'] = appendix
+        item['source'] = '上海市生物医药协会'
+        item['website'] =  '上海市生物医药协会'
+        item['link'] = lyurl
+        item['appendix_name'] = appendix_name
+        item['type'] = 1
+        item['tags'] = ''
+        item['time'] =get_times(time)
+        item['content'] = content
+        item['txt'] = txt
+        item['spider_name'] = 'SH_biomedical'
+        item['module_name'] = '行业协会'
+        yield item

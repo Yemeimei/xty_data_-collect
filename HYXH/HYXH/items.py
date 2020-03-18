@@ -8,7 +8,7 @@
 import scrapy
 
 
-class HyNewsItem(scrapy.Item):
+class HyxhItem(scrapy.Item):
     title = scrapy.Field()
     content = scrapy.Field()
     appendix = scrapy.Field()
