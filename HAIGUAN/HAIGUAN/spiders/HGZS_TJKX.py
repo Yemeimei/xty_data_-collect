@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import logging
-
+from HAIGUAN.items import HaiguanItem
+from HAIGUAN.util_custom.tools.attachment import get_attachments, get_times
 
 class HgzsTjkxSpider(scrapy.Spider):
     name = 'HGZS_TJKX'
@@ -11,10 +12,10 @@ class HgzsTjkxSpider(scrapy.Spider):
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
-        'CONCURRENT_REQUESTS_PER_DOMAIN': 10,
+        'CONCURRENT_REQUESTS_PER_DOMAIN': 1,
         'CONCURRENT_REQUESTS_PER_IP': 0,
         # 下载暂停
-        'DOWNLOAD_DELAY': 0.5,
+        'DOWNLOAD_DELAY': 10,
         'ITEM_PIPELINES': {
             # 设置异步入库方式
             'HAIGUAN.pipelines.MysqlTwistedPipeline': 600,
@@ -51,5 +52,48 @@ class HgzsTjkxSpider(scrapy.Spider):
 
     def parse(self, response):
         page_count = int(response.css('input[name=article_paging_list_hidden]::attr(totalpage)').extract_first())
-        logging.warning('正文获取失败,请检查' + str(page_count))
-        pass
+        pageId = response.css('#eprotalCurrentPageId::attr(value)').extract_first()
+        moduleId = response.css('input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
+        try:
+            for pagenum in range(page_count):
+                url = 'http://www.customs.gov.cn/eportal/ui?pageId='+pageId+'&currentPage='+str(pagenum+1)+'&moduleId='+moduleId+'&staticRequest=yes'
+                yield scrapy.Request(url, callback=self.parse_list, meta=response.meta, dont_filter=True)
+        except Exception as e:
+            logging.error(self.name + ": " + e.__str__())
+            logging.exception(e)
+
+    def parse_list(self, response):
+        for href in response.css('.conList_ull a::attr(href)').extract():
+            try:
+                url = response.urljoin(href)
+                # logging.error(url)
+                yield scrapy.Request(url, callback=self.parse_item, meta={'url': url}, dont_filter=True)
+            except Exception as e:
+                logging.error(self.name + ": " + e.__str__())
+                logging.exception(e)
+
+    def parse_item(self, response):
+        try:
+            item = HaiguanItem()
+            item['title'] = response.css('title::text').extract_first()
+            item['content'] = response.css('#easysiteText').extract_first()
+            item['time'] = get_times(response.css('meta[name=PubDate]::attr(content)').extract_first())
+            item['website'] = '中华人民共和国海关总署-统计快讯'
+            item['link'] = response.url
+            item['type'] = '1'
+            item['source'] = '中华人民共和国海关总署'
+            item['txt'] = ''.join(response.css('#easysiteText *::text').extract())
+            item['module_name'] = '中华人民共和国海关总署-统计快讯'
+            item['spider_name'] = 'HGZS_TJKX'
+            print(
+                "===========================>crawled one item" +
+                response.request.url)
+        except Exception as e:
+            logging.error(
+                self.name +
+                " in parse_item: url=" +
+                response.request.url +
+                ", exception=" +
+                e.__str__())
+            logging.exception(e)
+        yield item
