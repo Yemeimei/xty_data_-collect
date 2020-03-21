@@ -26,6 +26,7 @@ import logging
 
 import pymysql
 from twisted.enterprise import adbapi
+import time
 
 
 class MysqlTwistedPipeline(object):
@@ -71,12 +72,12 @@ class MysqlTwistedPipeline(object):
                 parm = (
                     item['title'],
                     item['content'],
-                    item['p_time'],
-                    item['region'],
-                    item['cate'],
+                    item['time'],
                     item['website'],
                     item['link'],
-                    item['code'],
+                    item['type'],
+                    item['source'],
+                    time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
                     item['txt'],
                     item['spider_name'],
                     item['module_name']
