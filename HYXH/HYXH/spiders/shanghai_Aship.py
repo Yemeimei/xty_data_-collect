@@ -12,10 +12,10 @@ from HYXH.util_custom.tools.attachment import get_attachments, get_times
 
 
 class HySpider(CrawlSpider):
-    name = 'shenzhen_clxh'
-    allowed_domains = ['www.szmma.org']
+    name = 'shanghai_Aship'
+    allowed_domains = ['www.caoe.org.cn']
     start_urls = [
-        f'http://www.szmma.org/portal/index/products/a/{x}.html'for x in range(1, 4)
+        f'http://www.ssnaoe.org/shcbyhy/node3/n6/index{x}.html'for x in range(1, 172)
     ]
     custom_settings = {
         # 并发请求
@@ -61,7 +61,7 @@ class HySpider(CrawlSpider):
         # pass
 
     rules = (
-        Rule(LinkExtractor(restrict_css='.wz.fr a'), callback='parse_items', follow=True),
+        Rule(LinkExtractor(restrict_css='.liebiao a'), callback='parse_items', follow=True),
     )
 
     def parse_items(self, response):
@@ -69,13 +69,13 @@ class HySpider(CrawlSpider):
         extractor = GeneralNewsExtractor()
         resp = response.text
         result = extractor.extract(resp, with_body_html=False)
-        title = response.css('.detai_bt h3::text').extract_first()
+        title = response.css('h2::text').extract_first()
         txt = result['content']
-        publish_time = result['publish_time']
+        publish_time = response.xpath('/html/body/div[4]/span[1]/text()').extract_first()
         time = get_times(publish_time)
         item = HyxhItem()
         content_css = [
-            '.content'
+            '.para.ma'
         ]
         for content in content_css:
             content = ''.join(response.css(content).extract())
@@ -86,8 +86,8 @@ class HySpider(CrawlSpider):
         item['title'] = title
         appendix, appendix_name = get_attachments(response)
         item['appendix'] = appendix
-        item['source'] = '深圳市新材料行业协会'
-        item['website'] = '深圳市新材料行业协会'
+        item['source'] = '上海市船舶与海洋工程学会'
+        item['website'] = '上海市船舶与海洋工程学会'
         item['link'] = lyurl
         item['appendix_name'] = appendix_name
         item['type'] = 1
@@ -95,7 +95,7 @@ class HySpider(CrawlSpider):
         item['time'] = time
         item['content'] = content
         item['txt'] = txt
-        item['spider_name'] = 'shenzhen_clxh'
+        item['spider_name'] = 'shanghai_Aship'
         item['module_name'] = '行业协会'
         yield item
 
