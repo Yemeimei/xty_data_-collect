@@ -4,6 +4,9 @@ import logging
 import scrapy
 from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
+
+from scrapy.linkextractors import LinkExtractor
+from scrapy.spiders import CrawlSpider, Rule
 from gne import GeneralNewsExtractor
 
 
@@ -16,10 +19,10 @@ from YanB.util_custom.tools.cate import get_category
 
 
 
-class YbLqSpider(CrawlSpider):
-    name = 'YB_lq'
-    allowed_domains = ['www.767stock.com']
-    start_urls = ['http://www.767stock.com/archives']
+class YbYoSpider(CrawlSpider):
+    name = 'YB_yo'
+    allowed_domains = ['www.iyiou.com']
+    start_urls = ['https://www.iyiou.com/topic/all-profundity/']
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
@@ -61,12 +64,13 @@ class YbLqSpider(CrawlSpider):
         # 'SPLASH_URL': "http://127.0.0.1:8050/"
     }
     rules = (
-        # Rule(LinkExtractor(restrict_css='..archives-list a '), follow=True),
-        Rule(LinkExtractor(restrict_css='.archives-list a'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(restrict_css='.deep_liLists a '), follow=True),
+        Rule(LinkExtractor(restrict_css='.next '), follow=True),
+        Rule(LinkExtractor(restrict_css='.business  a'), callback='parse_item', follow=True),
     )
 
     def parse_item(self, response):
-        item =YanbItem()
+        item = YanbItem()
         resp = response.text
         extractor = GeneralNewsExtractor()
         result = extractor.extract(resp, with_body_html=False)
@@ -74,7 +78,7 @@ class YbLqSpider(CrawlSpider):
         txt = result['content']
         p_time = result['publish_time']
         content_css = [
-            '.entry-content'
+            '#post_description'
         ]
         for content in content_css:
             content = ''.join(response.css(content).extract())
@@ -91,12 +95,12 @@ class YbLqSpider(CrawlSpider):
         item['appendix'] = appendix
         item['appendix_name'] = appendix_name
         item['content'] = ''.join(content)
-        item['pub'] = '乐晴智库'
+        item['pub'] = '亿欧'
         item['ctype'] = 3
-        item['website'] = '乐晴智库'
-        item['txt'] = txt
+        item['website'] = '亿欧'
+        item['txt'] = ''.join(txt).strip()
         item['link'] = response.url
-        item['spider_name'] = 'YB_lq'
+        item['spider_name'] = 'YB_yo'
         item['module_name'] = '研报'
         item['tags'] = tags
         if content:

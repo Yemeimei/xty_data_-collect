@@ -1,25 +1,19 @@
 # -*- coding: utf-8 -*-
 import logging
+import re
 
 import scrapy
-from scrapy.linkextractors import LinkExtractor
-from scrapy.spiders import CrawlSpider, Rule
 from gne import GeneralNewsExtractor
 
-
-
-
-
 from YanB.items import YanbItem
-from YanB.util_custom.tools.attachment import get_times, get_attachments
+from YanB.util_custom.tools.attachment import get_attachments, get_times
 from YanB.util_custom.tools.cate import get_category
 
 
 
-class YbLqSpider(CrawlSpider):
-    name = 'YB_lq'
-    allowed_domains = ['www.767stock.com']
-    start_urls = ['http://www.767stock.com/archives']
+class YbWbSpider(scrapy.Spider):
+    name = 'YB_wb'
+    # allowed_domains = ['wwwww']
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
@@ -60,13 +54,18 @@ class YbLqSpider(CrawlSpider):
         # # 'SPLASH_URL': "http://10.8.32.122:8050/"
         # 'SPLASH_URL': "http://127.0.0.1:8050/"
     }
-    rules = (
-        # Rule(LinkExtractor(restrict_css='..archives-list a '), follow=True),
-        Rule(LinkExtractor(restrict_css='.archives-list a'), callback='parse_item', follow=True),
-    )
+    start_urls = ['https://data.weibo.com/report/report?order=all-all-all-all-sj']
+
+    def start_requests(self):
+        yield scrapy.Request(self.start_urls[0], callback=self.parse)
+
+    def parse(self, response):
+        urls = response.css(".second-list a::attr(href)").extract()
+        for url in urls:
+            yield scrapy.Request(url, callback=self.parse_item, dont_filter=True)
 
     def parse_item(self, response):
-        item =YanbItem()
+        item = YanbItem()
         resp = response.text
         extractor = GeneralNewsExtractor()
         result = extractor.extract(resp, with_body_html=False)
@@ -74,7 +73,7 @@ class YbLqSpider(CrawlSpider):
         txt = result['content']
         p_time = result['publish_time']
         content_css = [
-            '.entry-content'
+            '.report-detail'
         ]
         for content in content_css:
             content = ''.join(response.css(content).extract())
@@ -91,12 +90,12 @@ class YbLqSpider(CrawlSpider):
         item['appendix'] = appendix
         item['appendix_name'] = appendix_name
         item['content'] = ''.join(content)
-        item['pub'] = '乐晴智库'
+        item['pub'] = '微报告'
         item['ctype'] = 3
-        item['website'] = '乐晴智库'
-        item['txt'] = txt
+        item['website'] = '微报告'
+        item['txt'] = ''.join(txt).strip()
         item['link'] = response.url
-        item['spider_name'] = 'YB_lq'
+        item['spider_name'] = 'YB_wb'
         item['module_name'] = '研报'
         item['tags'] = tags
         if content:

@@ -22,3 +22,4 @@ class YanbItem(scrapy.Item):
     appendix_name = scrapy.Field()
     spider_name = scrapy.Field()
     module_name = scrapy.Field()
+    txt = scrapy.Field()

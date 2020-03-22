@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6625ea44-e3c4-4eca-bcdc-b1d5a28c2c3f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/YanB/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/YanB/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HYXH/HYXH/spiders/SH_biomedical.py" beforeDir="false" afterPath="$PROJECT_DIR$/HYXH/HYXH/spiders/SH_biomedical.py" afterDir="false" />
-    </list>
+    <list default="true" id="6625ea44-e3c4-4eca-bcdc-b1d5a28c2c3f" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -88,6 +83,7 @@
       <workItem from="1584458173417" duration="387000" />
       <workItem from="1584459506142" duration="3384000" />
       <workItem from="1584537768128" duration="629000" />
+      <workItem from="1584538588033" duration="165000" />
     </task>
     <servers />
   </component>

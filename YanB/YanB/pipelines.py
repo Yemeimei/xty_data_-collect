@@ -75,13 +75,13 @@ class MysqlTwistedPipeline(object):
                         `time`,`content`,`type`,
                         `org_name`,`website`,`link`,
                         `appendix_name`,`spider_name`,`module_name`,
-                        `tags`) 
+                        `tags`,`txt`) 
                         values (
                         %s, %s, %s, 
                         %s, %s, %s,
                          %s, %s, %s,
                           %s, %s, %s,
-                           %s 
+                           %s ,%s
                         )
                     '''
             parm = (
@@ -101,7 +101,8 @@ class MysqlTwistedPipeline(object):
                 item['spider_name'],
                 item['module_name'],
 
-                item['tags']
+                item['tags'],
+                item['txt']
             )
             cursor.execute(sql, parm)
             # self.db.commit()
