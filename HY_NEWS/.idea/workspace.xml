@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7b87fc08-12c4-414c-bac7-96d884fe1796" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../YanB/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../YanB/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HY_NEWS/spiders/YiYao.py" beforeDir="false" afterPath="$PROJECT_DIR$/HY_NEWS/spiders/YiYao.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/HY_NEWS/spiders/sohu_auto.py" beforeDir="false" afterPath="$PROJECT_DIR$/HY_NEWS/spiders/sohu_auto.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,6 +126,7 @@
       <workItem from="1584459375194" duration="16167000" />
       <workItem from="1584482751368" duration="5000" />
       <workItem from="1584536375641" duration="20000" />
+      <workItem from="1584894943496" duration="4072000" />
     </task>
     <servers />
   </component>
@@ -148,10 +150,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state width="1398" height="352" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1584478486827" />
-    <state x="229" y="89" key="SettingsEditor" timestamp="1584459409523">
+    <state x="229" y="89" key="SettingsEditor" timestamp="1584898166717">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1584459409523" />
+    <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1584898166717" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/HY_NEWS$cate.coverage" NAME="cate Coverage Results" MODIFIED="1584471464722" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/HY_NEWS/util_custom/tools" />

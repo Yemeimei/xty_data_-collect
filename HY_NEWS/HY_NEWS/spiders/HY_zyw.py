@@ -11,15 +11,11 @@ from HY_NEWS.util_custom.tools.attachment import get_times
 from HY_NEWS.util_custom.tools.cate import get_category
 
 
-class YiyaoSpider(CrawlSpider):
-    name = 'YiYao'
-    allowed_domains = ['www.cpi.ac.cn','www.cccmhpie.org.cn']
-    start_urls = [
-                    'http://www.cpi.ac.cn/publish/default/hyzx/index.htm',
-                    'http://www.cccmhpie.org.cn/ShowNewsList.aspx?QueryStr=x08x12o8q7x09x01w1z4892x9994z6164z5759zO3w8w1u9v5v5v5zO3x10x02x11p4x2X12x01w1u8z8p2x01q9p4x2X12x01w1u9z8w7x08q7x15x15p3x0X14x18x0X14o3w8w1p3p9p3p3x0X14x18x0X14z8w7x08q7x15x15p4q7q8x08x01o8q7x09x01w1p3x2X15q5w7x08q7x15x15z8p5x10x05x13x17x01o3w8w1z8w8q7x16q7p3x0X14x18x0X14o3w8w1p3p9p3p3x0X14x18x0X14z8w8q7x16q7p4q7q8x08x01o8q7x09x01w1w8x11q9q5o0x05x14x15x16pQ7x03x01z8x00x0X15q9p5x10x05x13x17x01o3w8w1u9v5v5v5z8p2x1X1X16w7x08q7x15x15o3w8w1v7u8u9v5z8w7x08q7x15x15o3w8w1u9v5v5v5zO6x05x10x07o3w8w1u9v5v5v5',
-                     'http://www.cccmhpie.org.cn/ShowNewsList.aspx?QueryStr=x08x12o8q7x09x01w1y2269z8469y1160y4577zO3w8w1u9v5v5v1zO3x10x02x11p4x2X12x01w1u8z8p2x01q9p4x2X12x01w1u9z8w7x08q7x15x15p3x0X14x18x0X14o3w8w1p3p9p3p3x0X14x18x0X14z8w7x08q7x15x15p4q7q8x08x01o8q7x09x01w1p3x2X15q5w7x08q7x15x15z8p5x10x05x13x17x01o3w8w1z8w8q7x16q7p3x0X14x18x0X14o3w8w1p3p9p3p3x0X14x18x0X14z8w8q7x16q7p4q7q8x08x01o8q7x09x01w1w8x11q9q5o0x05x14x15x16pQ7x03x01z8x00x0X15q9p5x10x05x13x17x01o3w8w1u9v5v5v1z8p2x1X1X16w7x08q7x15x15o3w8w1v7u8u9v5z8w7x08q7x15x15o3w8w1u9v5v5v1zO6x05x10x07o3w8w1u9v5v5v1'
+class HyZywSpider(CrawlSpider):
+    name = 'HY_zyw'
+    allowed_domains = ['www.pm8.cn']
+    start_urls = ['http://www.pm8.cn/tech/tech_list.php?gopage=0&news_sort_id=1','http://www.pm8.cn/tech/tech_list.php?gopage=0&news_sort_id=11']
 
-                        ]
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
@@ -61,9 +57,8 @@ class YiyaoSpider(CrawlSpider):
         # 'SPLASH_URL': "http://127.0.0.1:8050/"
     }
     rules = (
-        Rule(LinkExtractor(restrict_css='.pager a:nth-child(3) '), follow=True),
-        Rule(LinkExtractor(restrict_css='.news-li a '), callback='parse_item', follow=True),
-        Rule(LinkExtractor(restrict_css='.DocTitle a'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(restrict_css='.recruit_kj .zixun'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(restrict_css='.membertable_page  a'), follow=True),
     )
 
     def parse_item(self, response):
@@ -75,10 +70,9 @@ class YiyaoSpider(CrawlSpider):
         txt = result['content']
         p_time = result['publish_time']
         lyurl = response.url
-        lyname = '医药'
+        lyname = '制药_设备'
         content_css = [
-            '.left-cc',
-            '.pagesContent',
+            '.f14',
         ]
         for content in content_css:
             content = ''.join(response.css(content).extract())
@@ -91,7 +85,7 @@ class YiyaoSpider(CrawlSpider):
         item['txt'] = txt
         item['p_time'] = get_times(p_time)
         item['content'] = content
-        item['spider_name'] = 'YiYao'
+        item['spider_name'] = 'HY_zyw'
         item['module_name'] = '行业新闻'
         item['cate'] = classify
         item['region'] = region
