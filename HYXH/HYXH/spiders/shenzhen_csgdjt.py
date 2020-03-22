@@ -12,11 +12,7 @@ from HYXH.util_custom.tools.attachment import get_attachments, get_times
 
 
 class HySpider(CrawlSpider):
-    name = 'SH_biomedical'
-    allowed_domains = ['www.sbia.org.cn']
-    start_urls = [
-        f'http://www.sbia.org.cn/news.aspx?newscateid=15&IntroCateId=15&BaseInfoCateId=15&cateid=15&ViewCateID=15&aboutidx=3&page={x}'
-        for x in range(1, 158)]
+    name = 'shenzhen_csgdjt'
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
@@ -57,24 +53,42 @@ class HySpider(CrawlSpider):
         # # 'SPLASH_URL': "http://10.8.32.122:8050/"
         # 'SPLASH_URL': "http://127.0.0.1:8050/"
     }
-    # def start_requests(self):
-        # pass
-
-    rules = (
-        Rule(LinkExtractor(restrict_css='.sedivnewsrenke '), callback='parse_items', follow=True),
-    )
+    def start_requests(self):
+        try:
+            header = {
+                'Host':'www.szurta.org',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'
+            }
+            for x in range(1, 56):
+                formData = {
+                    'cmd': 'getAjaxPageModuleInfo',
+                    '_colId': '103',
+                    '_extId': '0',
+                    'moduleId': '307',
+                    'href': '/col.jsp?m307pageno={x}&id=103',
+                    'newNextPage': 'false',
+                    'needIncToVue': 'false'
+                }
+                yield scrapy.FormRequest('http://www.szurta.org/ajax/ajaxLoadModuleDom_h.jsp',formdata=formData,headers=header,callback=self.parse_page,dont_filter=True)
+        except Exception as e:
+            logging.error(self.name + ": " + e.__str__())
+            logging.exception(e)
+    def parse_page(self, response):
+        for url in response.css('.fk-newsListTitle::attr(href)').extract():
+            print(url.replace('\\"',''))
+            yield scrapy.Request('http://www.szurta.org'+url.replace('\\"',''), callback=self.parse_items, dont_filter=True)
 
     def parse_items(self, response):
         extractor = GeneralNewsExtractor()
         resp = response.text
         result = extractor.extract(resp, with_body_html=False)
-
-        title = result['title']
+        title = response.css('.title::text').extract_first()
         txt = result['content']
-        time = get_times(''.join(response.xpath('/html/body/div[4]/div/div/div[2]/div[3]/div[2]//text()').extract()))
+        publish_time = result['publish_time']
+        time = get_times(publish_time)
         item = HyxhItem()
         content_css = [
-            '.contenttext'
+            '.richContent.richContent3'
         ]
         lyurl = response.url
         for content in content_css:
@@ -86,15 +100,15 @@ class HySpider(CrawlSpider):
         item['title'] = title
         appendix, appendix_name = get_attachments(response)
         item['appendix'] = appendix
-        item['source'] = '上海市生物医药协会'
-        item['website'] =  '上海市生物医药协会'
+        item['source'] = '深圳市城市轨道交通协会'
+        item['website'] =  '深圳市城市轨道交通协会'
         item['link'] = lyurl
         item['appendix_name'] = appendix_name
         item['type'] = 1
         item['tags'] = ''
-        item['time'] =get_times(time)
+        item['time'] = time
         item['content'] = content
         item['txt'] = txt
-        item['spider_name'] = 'SH_biomedical'
+        item['spider_name'] = 'shenzhen_csgdjt'
         item['module_name'] = '行业协会'
         yield item

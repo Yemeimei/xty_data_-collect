@@ -12,11 +12,11 @@ from HYXH.util_custom.tools.attachment import get_attachments, get_times
 
 
 class HySpider(CrawlSpider):
-    name = 'SH_biomedical'
-    allowed_domains = ['www.sbia.org.cn']
+    name = 'zhejiang_clxh'
+    allowed_domains = ['www.xclcy.com']
     start_urls = [
-        f'http://www.sbia.org.cn/news.aspx?newscateid=15&IntroCateId=15&BaseInfoCateId=15&cateid=15&ViewCateID=15&aboutidx=3&page={x}'
-        for x in range(1, 158)]
+        f'http://www.xclcy.com/info/list.php?catid=2374&page={x}'for x in range(1, 10)
+    ]
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
@@ -61,22 +61,22 @@ class HySpider(CrawlSpider):
         # pass
 
     rules = (
-        Rule(LinkExtractor(restrict_css='.sedivnewsrenke '), callback='parse_items', follow=True),
+        Rule(LinkExtractor(restrict_css='.in_info_con a'), callback='parse_items', follow=True),
     )
 
     def parse_items(self, response):
+        lyurl = response.url
         extractor = GeneralNewsExtractor()
         resp = response.text
         result = extractor.extract(resp, with_body_html=False)
-
-        title = result['title']
+        title = response.css('.titles::text').extract_first()
         txt = result['content']
-        time = get_times(''.join(response.xpath('/html/body/div[4]/div/div/div[2]/div[3]/div[2]//text()').extract()))
+        publish_time = result['publish_time']
+        time = get_times(publish_time)
         item = HyxhItem()
         content_css = [
-            '.contenttext'
+            'content'
         ]
-        lyurl = response.url
         for content in content_css:
             content = ''.join(response.css(content).extract())
             if content:
@@ -86,15 +86,16 @@ class HySpider(CrawlSpider):
         item['title'] = title
         appendix, appendix_name = get_attachments(response)
         item['appendix'] = appendix
-        item['source'] = '上海市生物医药协会'
-        item['website'] =  '上海市生物医药协会'
+        item['source'] = '浙江省新材料产业协会'
+        item['website'] = '浙江省新材料产业协会'
         item['link'] = lyurl
         item['appendix_name'] = appendix_name
         item['type'] = 1
         item['tags'] = ''
-        item['time'] =get_times(time)
+        item['time'] = time
         item['content'] = content
         item['txt'] = txt
-        item['spider_name'] = 'SH_biomedical'
+        item['spider_name'] = 'zhejiang_clxh'
         item['module_name'] = '行业协会'
         yield item
+

@@ -12,11 +12,11 @@ from HYXH.util_custom.tools.attachment import get_attachments, get_times
 
 
 class HySpider(CrawlSpider):
-    name = 'SH_biomedical'
-    allowed_domains = ['www.sbia.org.cn']
+    name = 'xiamen'
+    allowed_domains = ['www.xamd.org']
     start_urls = [
-        f'http://www.sbia.org.cn/news.aspx?newscateid=15&IntroCateId=15&BaseInfoCateId=15&cateid=15&ViewCateID=15&aboutidx=3&page={x}'
-        for x in range(1, 158)]
+        f'http://www.xamd.org/market-148-{x}.aspx'
+        for x in range(1, 10)]
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
@@ -61,7 +61,7 @@ class HySpider(CrawlSpider):
         # pass
 
     rules = (
-        Rule(LinkExtractor(restrict_css='.sedivnewsrenke '), callback='parse_items', follow=True),
+        Rule(LinkExtractor(restrict_css='.nowpsc a'), callback='parse_items', follow=True),
     )
 
     def parse_items(self, response):
@@ -69,12 +69,13 @@ class HySpider(CrawlSpider):
         resp = response.text
         result = extractor.extract(resp, with_body_html=False)
 
-        title = result['title']
+        title = response.css('.tlics::text').extract_first()
         txt = result['content']
-        time = get_times(''.join(response.xpath('/html/body/div[4]/div/div/div[2]/div[3]/div[2]//text()').extract()))
+        publish_time = result['publish_time']
+        time = get_times(publish_time)
         item = HyxhItem()
         content_css = [
-            '.contenttext'
+            '.conlme'
         ]
         lyurl = response.url
         for content in content_css:
@@ -86,15 +87,15 @@ class HySpider(CrawlSpider):
         item['title'] = title
         appendix, appendix_name = get_attachments(response)
         item['appendix'] = appendix
-        item['source'] = '上海市生物医药协会'
-        item['website'] =  '上海市生物医药协会'
+        item['source'] = '厦门市医疗器械行业协会'
+        item['website'] =  '厦门市医疗器械行业协会'
         item['link'] = lyurl
         item['appendix_name'] = appendix_name
         item['type'] = 1
         item['tags'] = ''
-        item['time'] =get_times(time)
+        item['time'] = time
         item['content'] = content
         item['txt'] = txt
-        item['spider_name'] = 'SH_biomedical'
+        item['spider_name'] = 'xiamen'
         item['module_name'] = '行业协会'
         yield item

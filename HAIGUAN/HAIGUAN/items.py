@@ -3,24 +3,22 @@
 # Define here the models for your scraped items
 #
 # See documentation in:
-# https://doc.scrapy.org/en/latest/topics/items.html
+# https://docs.scrapy.org/en/latest/topics/items.html
 
 import scrapy
 
 
-class HyxhItem(scrapy.Item):
+class HaiguanItem(scrapy.Item):
+    # define the fields for your item here like:
+    # name = scrapy.Field()
     title = scrapy.Field()
     content = scrapy.Field()
-    appendix = scrapy.Field()
-    source = scrapy.Field()
     time = scrapy.Field()
     website = scrapy.Field()
     link = scrapy.Field()
-    tags = scrapy.Field()
     type = scrapy.Field()
+    source = scrapy.Field()
     create_time = scrapy.Field()
-    appendix_name = scrapy.Field()
     txt = scrapy.Field()
     spider_name = scrapy.Field()
     module_name = scrapy.Field()
-

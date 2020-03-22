@@ -12,11 +12,11 @@ from HYXH.util_custom.tools.attachment import get_attachments, get_times
 
 
 class HySpider(CrawlSpider):
-    name = 'SH_biomedical'
-    allowed_domains = ['www.sbia.org.cn']
+    name = 'jiangsu'
+    allowed_domains = ['jamia.org.cn']
     start_urls = [
-        f'http://www.sbia.org.cn/news.aspx?newscateid=15&IntroCateId=15&BaseInfoCateId=15&cateid=15&ViewCateID=15&aboutidx=3&page={x}'
-        for x in range(1, 158)]
+        f'http://jamia.org.cn/index.php?g=&m=contents&a=index&term_id=31&page={x}'for x in range(1, 7)
+    ]
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
@@ -61,40 +61,42 @@ class HySpider(CrawlSpider):
         # pass
 
     rules = (
-        Rule(LinkExtractor(restrict_css='.sedivnewsrenke '), callback='parse_items', follow=True),
+        Rule(LinkExtractor(restrict_css='.jamia_tittle_02_ju a'), callback='parse_items', follow=True),
     )
 
     def parse_items(self, response):
-        extractor = GeneralNewsExtractor()
-        resp = response.text
-        result = extractor.extract(resp, with_body_html=False)
-
-        title = result['title']
-        txt = result['content']
-        time = get_times(''.join(response.xpath('/html/body/div[4]/div/div/div[2]/div[3]/div[2]//text()').extract()))
-        item = HyxhItem()
-        content_css = [
-            '.contenttext'
-        ]
         lyurl = response.url
-        for content in content_css:
-            content = ''.join(response.css(content).extract())
-            if content:
-                break
-            if not content:
-                logging.warning(f'{response.url}' + '当前url无 css 适配未提取 centent')
-        item['title'] = title
-        appendix, appendix_name = get_attachments(response)
-        item['appendix'] = appendix
-        item['source'] = '上海市生物医药协会'
-        item['website'] =  '上海市生物医药协会'
-        item['link'] = lyurl
-        item['appendix_name'] = appendix_name
-        item['type'] = 1
-        item['tags'] = ''
-        item['time'] =get_times(time)
-        item['content'] = content
-        item['txt'] = txt
-        item['spider_name'] = 'SH_biomedical'
-        item['module_name'] = '行业协会'
-        yield item
+        if lyurl.find('http://jamia.org.cn/index.php?g=&m=contents&a=index&term_id=31&page=') < 0:
+            extractor = GeneralNewsExtractor()
+            resp = response.text
+            result = extractor.extract(resp, with_body_html=False)
+
+            title = response.css('h2::text').extract_first()
+            txt = result['content']
+            publish_time = result['publish_time']
+            time = get_times(publish_time)
+            item = HyxhItem()
+            content_css = [
+                '/html/body/div[1]/div[4]/table/tbody/tr/td[2]/table/tbody/tr[2]/td/table/tbody/tr[4]'
+            ]
+            for content in content_css:
+                content = ''.join(response.xpath(content).extract())
+                if content:
+                    break
+                if not content:
+                    logging.warning(f'{response.url}' + '当前url无 css 适配未提取 centent')
+            item['title'] = title
+            appendix, appendix_name = get_attachments(response)
+            item['appendix'] = appendix
+            item['source'] = '江苏省新材料产业协会'
+            item['website'] =  '江苏省新材料产业协会'
+            item['link'] = lyurl
+            item['appendix_name'] = appendix_name
+            item['type'] = 1
+            item['tags'] = ''
+            item['time'] = time
+            item['content'] = content
+            item['txt'] = txt
+            item['spider_name'] = 'jiangsu'
+            item['module_name'] = '行业协会'
+            yield item

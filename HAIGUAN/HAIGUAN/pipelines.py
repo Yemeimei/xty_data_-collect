@@ -23,9 +23,10 @@
 #         return item
 import datetime
 import logging
-import time
+
 import pymysql
 from twisted.enterprise import adbapi
+import time
 
 
 class MysqlTwistedPipeline(object):
@@ -62,33 +63,30 @@ class MysqlTwistedPipeline(object):
         print('有错')
 
     def do_insert(self, cursor, item):
-        print('insert data.......')
-        try:
-            sql = '''
-                        insert into `topic_government_hangyexh`  (`title`, `content`, `appendix`,`appendix_name`,`source`,`time`, `website`, `type`, `tags`,
-                        `link`, `create_time`,`txt`,`spider_name`,`module_name`) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                    '''
-            parm = (
-                item['title'],
-                item['content'],
-                item['appendix'],
-                item['appendix_name'],
-                item['source'],
-                item['time'],
-                item['website'],
-                item['type'],
-                item['tags'],
-                item['link'],
-                time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
-                item['txt'],
-                item['spider_name'],
-                item['module_name']
-            )
-            cursor.execute(sql, parm)
-            # self.db.commit()
-        except Exception as e:
+            try:
+                sql = '''
+                            insert ignore into `topic_government_haiguan`  (`title`, `content`, `time`,
+                            `website`, `link`, `type`,`source`,`create_time`,`txt`,`spider_name`,`module_name`) 
+                            values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        '''
+                parm = (
+                    item['title'],
+                    item['content'],
+                    item['time'],
+                    item['website'],
+                    item['link'],
+                    item['type'],
+                    item['source'],
+                    time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+                    item['txt'],
+                    item['spider_name'],
+                    item['module_name']
+                )
+                cursor.execute(sql, parm)
+                # self.db.commit()
+            except Exception as e:
 
-            logging.warning(datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S') + '----' + e.__str__() + '\n')
+                logging.warning(datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S') + '----' + e.__str__() + '\n')
 
     def close_spider(self, spider):
         logging.warning(datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S') + '----' + '爬虫结束'+ '\n')

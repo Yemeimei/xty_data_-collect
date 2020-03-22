@@ -12,11 +12,9 @@ from HYXH.util_custom.tools.attachment import get_attachments, get_times
 
 
 class HySpider(CrawlSpider):
-    name = 'SH_biomedical'
-    allowed_domains = ['www.sbia.org.cn']
-    start_urls = [
-        f'http://www.sbia.org.cn/news.aspx?newscateid=15&IntroCateId=15&BaseInfoCateId=15&cateid=15&ViewCateID=15&aboutidx=3&page={x}'
-        for x in range(1, 158)]
+    name = 'zhejiang'
+    allowed_domains = ['www.zrcma.org.cn']
+    start_urls = ['http://www.zrcma.org.cn/information/54/1.html','http://www.zrcma.org.cn/information/54/2.html','http://www.zrcma.org.cn/information/66.html']
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
@@ -61,7 +59,7 @@ class HySpider(CrawlSpider):
         # pass
 
     rules = (
-        Rule(LinkExtractor(restrict_css='.sedivnewsrenke '), callback='parse_items', follow=True),
+        Rule(LinkExtractor(restrict_css='.list-content a'), callback='parse_items', follow=True),
     )
 
     def parse_items(self, response):
@@ -69,12 +67,13 @@ class HySpider(CrawlSpider):
         resp = response.text
         result = extractor.extract(resp, with_body_html=False)
 
-        title = result['title']
+        title = response.css('#rtitle::text').extract_first()
         txt = result['content']
-        time = get_times(''.join(response.xpath('/html/body/div[4]/div/div/div[2]/div[3]/div[2]//text()').extract()))
+        publish_time = result['publish_time']
+        time = get_times(publish_time)
         item = HyxhItem()
         content_css = [
-            '.contenttext'
+            '.entry'
         ]
         lyurl = response.url
         for content in content_css:
@@ -86,15 +85,15 @@ class HySpider(CrawlSpider):
         item['title'] = title
         appendix, appendix_name = get_attachments(response)
         item['appendix'] = appendix
-        item['source'] = '上海市生物医药协会'
-        item['website'] =  '上海市生物医药协会'
+        item['source'] = '浙江省轨道交通建设与管理协会'
+        item['website'] =  '浙江省轨道交通建设与管理协会'
         item['link'] = lyurl
         item['appendix_name'] = appendix_name
         item['type'] = 1
         item['tags'] = ''
-        item['time'] =get_times(time)
+        item['time'] = time
         item['content'] = content
         item['txt'] = txt
-        item['spider_name'] = 'SH_biomedical'
+        item['spider_name'] = 'zhejiang'
         item['module_name'] = '行业协会'
         yield item
