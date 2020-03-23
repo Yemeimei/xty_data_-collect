@@ -51,22 +51,24 @@ class HgzsTjkxSpider(scrapy.Spider):
     }
 
     def parse(self, response):
+        page_id = response.css('#eprotalCurrentPageId::attr(value)').extract_first()
+        module_id = response.css('input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
+        url = 'http://www.customs.gov.cn/eportal/ui?pageId=' + page_id + '&currentPage=1&moduleId=' + module_id + '&staticRequest=yes'
+        yield scrapy.Request(url, callback=self.parse_total, meta=response.meta, dont_filter=True)
+
+    def parse_total(self, response):
         page_count = int(response.css('input[name=article_paging_list_hidden]::attr(totalpage)').extract_first())
-        pageId = response.css('#eprotalCurrentPageId::attr(value)').extract_first()
-        moduleId = response.css('input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
-        try:
-            for pagenum in range(page_count):
-                url = 'http://www.customs.gov.cn/eportal/ui?pageId='+pageId+'&currentPage='+str(pagenum+1)+'&moduleId='+moduleId+'&staticRequest=yes'
-                yield scrapy.Request(url, callback=self.parse_list, meta=response.meta, dont_filter=True)
-        except Exception as e:
-            logging.error(self.name + ": " + e.__str__())
-            logging.exception(e)
+        page_id = response.css('#eprotalCurrentPageId::attr(value)').extract_first()
+        module_id = response.css('input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
+        for pagenum in range(page_count):
+            url = 'http://www.customs.gov.cn/eportal/ui?pageId=' + page_id + '&currentPage=' + str(
+                pagenum + 1) + '&moduleId=' + module_id + '&staticRequest=yes'
+            yield scrapy.Request(url, callback=self.parse_list, meta=response.meta, dont_filter=True)
 
     def parse_list(self, response):
         for href in response.css('.conList_ull a::attr(href)').extract():
             try:
                 url = response.urljoin(href)
-                # logging.error(url)
                 yield scrapy.Request(url, callback=self.parse_item, meta={'url': url}, dont_filter=True)
             except Exception as e:
                 logging.error(self.name + ": " + e.__str__())
