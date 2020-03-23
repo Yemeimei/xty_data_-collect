@@ -67,12 +67,10 @@ class HgzsTjkxSpider(scrapy.Spider):
 
     def parse_list(self, response):
         for href in response.css('.conList_ull a::attr(href)').extract():
-            try:
-                url = response.urljoin(href)
+            url = response.urljoin(href).strip()
+            if (url.endswith('.html') or url.endswith('.htm')) and url.startswith('http://') and (
+                    url != response.url):
                 yield scrapy.Request(url, callback=self.parse_item, meta={'url': url}, dont_filter=True)
-            except Exception as e:
-                logging.error(self.name + ": " + e.__str__())
-                logging.exception(e)
 
     def parse_item(self, response):
         try:

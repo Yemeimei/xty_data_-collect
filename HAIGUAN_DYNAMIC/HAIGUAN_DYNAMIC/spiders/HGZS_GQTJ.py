@@ -4,10 +4,12 @@ import logging
 from HAIGUAN_DYNAMIC.items import HaiguanDynamicItem
 from HAIGUAN_DYNAMIC.util_custom.tools.attachment import get_attachments, get_times
 
+
 class HgzsGqtjSpider(scrapy.Spider):
     name = 'HGZS_GQTJ'
     # allowed_domains = ['http://www.customs.gov.cn/customs/xwfb34/302262/302265/index.html']
-    start_urls = ['http://www.customs.gov.cn/customs/xwfb34/302262/302265/index.html']
+    start_urls = [
+        'http://www.customs.gov.cn/customs/xwfb34/302262/302265/index.html']
 
     custom_settings = {
         # 并发请求
@@ -51,18 +53,56 @@ class HgzsGqtjSpider(scrapy.Spider):
     }
 
     def parse(self, response):
-        page_count = int(response.css('input[name=article_paging_list_hidden]::attr(totalpage)').extract_first())
-        pageId = response.css('#eprotalCurrentPageId::attr(value)').extract_first()
-        moduleId = response.css('input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
-        url = 'http://www.customs.gov.cn/eportal/ui?pageId=' + pageId + '&currentPage=1&moduleId=' + moduleId + '&staticRequest=yes'
+        pageId = response.css(
+            '#eprotalCurrentPageId::attr(value)').extract_first()
+        moduleId = response.css(
+            'input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
+        url = 'http://www.customs.gov.cn/eportal/ui?pageId=' + pageId + \
+            '&currentPage=1&moduleId=' + moduleId + '&staticRequest=yes'
         yield scrapy.Request(url, callback=self.parse_total, meta=response.meta, dont_filter=True)
 
     def parse_total(self, response):
-        page_count = int(response.css('input[name=article_paging_list_hidden]::attr(totalpage)').extract_first())
-        pageId = response.css('#eprotalCurrentPageId::attr(value)').extract_first()
-        moduleId = response.css('input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
+        page_count = int(response.css(
+            'input[name=article_paging_list_hidden]::attr(totalpage)').extract_first())
+        pageId = response.css(
+            '#eprotalCurrentPageId::attr(value)').extract_first()
+        moduleId = response.css(
+            'input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
         for pagenum in range(page_count):
-            url = 'http://www.customs.gov.cn/eportal/ui?pageId=' + pageId + '&currentPage=' + str(
-                pagenum + 1) + '&moduleId=' + moduleId + '&staticRequest=yes'
-            logging.error(url)
-            # yield scrapy.Request(url, callback=self.parse_list, meta=response.meta, dont_filter=True)
+            url = 'http://www.customs.gov.cn/eportal/ui?pageId=' + pageId + '&currentPage=' + \
+                str(pagenum + 1) + '&moduleId=' + moduleId + '&staticRequest=yes'
+            yield scrapy.Request(url, callback=self.parse_list, meta=response.meta, dont_filter=True)
+
+    def parse_list(self, response):
+        for href in response.css('.conList_ull a::attr(href)').extract():
+            url = response.urljoin(href).strip()
+            if (url.endswith('.html') or url.endswith('.htm')) and url.startswith('http://') and (
+                    url != response.url):
+                yield scrapy.Request(url, callback=self.parse_item, meta={'url': url}, dont_filter=True)
+
+    def parse_item(self, response):
+        try:
+            item = HaiguanDynamicItem()
+            item['title'] = response.css('title::text').extract_first()
+            item['time'] = get_times(
+                response.css('meta[name=PubDate]::attr(content)').extract_first())
+            item['content'] = response.css('#easysiteText').extract_first()
+            item['name'] = '中华人民共和国海关总署'
+            item['website'] = '中华人民共和国海关总署-关区统计'
+            item['link'] = response.url
+            item['txt'] = ''.join(
+                response.css('#easysiteText *::text').extract())
+            item['module_name'] = '中华人民共和国海关总署-关区统计'
+            item['spider_name'] = 'HGZS_GQTJ'
+            print(
+                "===========================>crawled one item" +
+                response.request.url)
+        except Exception as e:
+            logging.error(
+                self.name +
+                " in parse_item: url=" +
+                response.request.url +
+                ", exception=" +
+                e.__str__())
+            logging.exception(e)
+        yield item
