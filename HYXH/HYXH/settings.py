@@ -34,4 +34,4 @@ MYSQL_USER = 'root'
 MYSQL_DB = 'python'
 MYSQL_PORT = 3306
 MYSQL_CHRSET = 'utf8'
-# LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'INFO'
