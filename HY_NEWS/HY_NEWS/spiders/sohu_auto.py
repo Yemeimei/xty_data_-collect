@@ -91,7 +91,7 @@ class SohuAutoSpider(CrawlSpider):
             '.content-text',
         ]
         lyurl = response.url
-        lyname = '中国工业新闻网'
+        lyname = '搜狐汽车'
         for content in content_css:
             content = ''.join(response.css(content).extract())
             if content:

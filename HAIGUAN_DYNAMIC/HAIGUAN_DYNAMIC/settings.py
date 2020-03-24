@@ -1,26 +1,25 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for YanB project
+# Scrapy settings for HAIGUAN project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
 #
-#     https://doc.scrapy.org/en/latest/topics/settings.html
-#     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
+#     https://docs.scrapy.org/en/latest/topics/settings.html
+#     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
+#     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'YanB'
+BOT_NAME = 'HAIGUAN_DYNAMIC'
 
-SPIDER_MODULES = ['YanB.spiders']
-NEWSPIDER_MODULE = 'YanB.spiders'
+SPIDER_MODULES = ['HAIGUAN_DYNAMIC.spiders']
+NEWSPIDER_MODULE = 'HAIGUAN_DYNAMIC.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'YanB (+http://www.yourdomain.com)'
+#USER_AGENT = 'HAIGUAN (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
-
 
 # MYSQL_HOST = '10.8.32.125'
 # MYSQL_PASSWORD = 'Admin123!'
@@ -40,4 +39,3 @@ MYSQL_USER = 'root'
 MYSQL_DB = 'python'
 MYSQL_PORT = 3306
 MYSQL_CHRSET = 'utf8'
-# LOG_LEVEL = 'INFO'

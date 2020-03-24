@@ -4,16 +4,6 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-import datetime
-
-import pymysql
-import redis
-from scrapy.exceptions import DropItem
-from twisted.enterprise import adbapi
-import logging
-
-
-
 
 
 # class DuplicatesPipeline(object):
@@ -26,12 +16,17 @@ import logging
 #     def process_item(self, item, spider):
 #         content = str(item)
 #         tax = self.br.is_exist(content)
-#         print('is_exists', tax)
 #         if tax:
 #             print('=================================================')
 #             raise DropItem("Duplicate book found:%s" % item)
 #         self.br.add(content)
 #         return item
+import datetime
+import logging
+
+import pymysql
+from twisted.enterprise import adbapi
+import time
 
 
 class MysqlTwistedPipeline(object):
@@ -64,51 +59,33 @@ class MysqlTwistedPipeline(object):
 
     def handle_error(self, failure, item, spider):
         # 处理异步插入的异常
-        logging.warning(datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S') + '----' + failure + '\n')
+        logging.warning(datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S') + '----' + str(failure) + '\n')
         print('有错')
 
     def do_insert(self, cursor, item):
-        try:
-            sql = '''
-                        insert ignore into `topic_info_yanbao_dfcfw` (
-                        `title`, `industry_type`,`appendix`,
-                        `time`,`content`,`type`,
-                        `org_name`,`website`,`link`,
-                        `appendix_name`,`spider_name`,`module_name`,
-                        `tags`,`txt`) 
-                        values (
-                        %s, %s, %s, 
-                        %s, %s, %s,
-                         %s, %s, %s,
-                          %s, %s, %s,
-                           %s ,%s
-                        )
-                    '''
-            parm = (
-                item['title'],
-                item['industry'],
-                item['appendix'],
+            try:
+                sql = '''
+                            insert ignore into `topic_government_haiguan_dynamic`  (`title`, `time`, `content`,
+                            `name`, `website`, `link`,`create_time`,`txt`,`spider_name`,`module_name`) 
+                            values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        '''
+                parm = (
+                    item['title'],
+                    item['time'],
+                    item['content'],
+                    item['name'],
+                    item['website'],
+                    item['link'],
+                    time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()),
+                    item['txt'],
+                    item['spider_name'],
+                    item['module_name']
+                )
+                cursor.execute(sql, parm)
+                # self.db.commit()
+            except Exception as e:
 
-                item['p_time'],
-                item['content'],
-                item['ctype'],
-
-                item['pub'],
-                item['website'],
-                item['link'],
-
-                item['appendix_name'],
-                item['spider_name'],
-                item['module_name'],
-
-                item['tags'],
-                item['txt']
-            )
-            cursor.execute(sql, parm)
-            # self.db.commit()
-        except Exception as e:
-            # print(e)
-            logging.warning(datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S') + '----' + e.__str__() + '\n')
+                logging.warning(datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S') + '----' + e.__str__() + '\n')
 
     def close_spider(self, spider):
-        logging.warning("爬虫结束")
+        logging.warning(datetime.datetime.today().strftime('%Y-%m-%d %H:%M:%S') + '----' + '爬虫结束'+ '\n')

@@ -4,11 +4,11 @@ import logging
 from HAIGUAN.items import HaiguanItem
 from HAIGUAN.util_custom.tools.attachment import get_attachments, get_times
 
-class HgzsTjkxSpider(scrapy.Spider):
-    name = 'HGZS_TJKX'
-    # allowed_domains = ['http://www.customs.gov.cn/customs/302249/302274/302275/index.html']
-    start_urls = [
-        'http://www.customs.gov.cn/customs/302249/302274/302275/index.html']
+class HgzsTjybSpider(scrapy.Spider):
+    name = 'HGZS_TJYB'
+    # allowed_domains = ['http://www.customs.gov.cn/customs/302249/302274/302277/index.html']
+    start_urls = ['http://www.customs.gov.cn/customs/302249/302274/302277/index.html']
+
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
@@ -51,26 +51,10 @@ class HgzsTjkxSpider(scrapy.Spider):
     }
 
     def parse(self, response):
-        page_id = response.css('#eprotalCurrentPageId::attr(value)').extract_first()
-        module_id = response.css('input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
-        url = 'http://www.customs.gov.cn/eportal/ui?pageId=' + page_id + '&currentPage=1&moduleId=' + module_id + '&staticRequest=yes'
-        yield scrapy.Request(url, callback=self.parse_total, meta=response.meta, dont_filter=True)
-
-    def parse_total(self, response):
-        page_count = int(response.css('input[name=article_paging_list_hidden]::attr(totalpage)').extract_first())
-        page_id = response.css('#eprotalCurrentPageId::attr(value)').extract_first()
-        module_id = response.css('input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
-        for pagenum in range(page_count):
-            url = 'http://www.customs.gov.cn/eportal/ui?pageId=' + page_id + '&currentPage=' + str(
-                pagenum + 1) + '&moduleId=' + module_id + '&staticRequest=yes'
-            yield scrapy.Request(url, callback=self.parse_list, meta=response.meta, dont_filter=True)
-
-    def parse_list(self, response):
-        for href in response.css('.conList_ull a::attr(href)').extract():
+        for href in response.css('td a.blue::attr(href)').extract():
             url = response.urljoin(href).strip()
-            if (url.endswith('.html') or url.endswith('.htm')) and url.startswith('http://') and (
-                    url != response.url):
-                yield scrapy.Request(url, callback=self.parse_item, meta={'url': url}, dont_filter=True)
+            if (url.endswith('.html') or url.endswith('.htm')) and url.startswith('http://') and (url != response.url):
+                yield scrapy.Request(url, callback=self.parse_item, meta=response.meta, dont_filter=True)
 
     def parse_item(self, response):
         try:
@@ -78,13 +62,13 @@ class HgzsTjkxSpider(scrapy.Spider):
             item['title'] = response.css('title::text').extract_first()
             item['content'] = response.css('#easysiteText').extract_first()
             item['time'] = get_times(response.css('meta[name=PubDate]::attr(content)').extract_first())
-            item['website'] = '中华人民共和国海关总署-统计快讯'
+            item['website'] = '中华人民共和国海关总署-统计月报'
             item['link'] = response.url
-            item['type'] = '1'
+            item['type'] = '2'
             item['source'] = '中华人民共和国海关总署'
             item['txt'] = ''.join(response.css('#easysiteText *::text').extract())
-            item['module_name'] = '中华人民共和国海关总署-统计快讯'
-            item['spider_name'] = 'HGZS_TJKX'
+            item['module_name'] = '中华人民共和国海关总署-统计月报'
+            item['spider_name'] = 'HGZS_TJYB'
             print(
                 "===========================>crawled one item" +
                 response.request.url)
