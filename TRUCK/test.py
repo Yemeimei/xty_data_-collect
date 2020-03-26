@@ -1,0 +1,1 @@
+# -*- coding: utf-8 -*-import requestsfrom gne import GeneralNewsExtractorfrom parsel import Selectorurl ='http://www.pharmcube.com/news/index/news'data={'pages': '1822','currentPage': '3'}respo =requests.post(url,data=data)extractor = GeneralNewsExtractor()response =Selector(respo.text)print(response.css('a::attr(href)').extract())
