@@ -1,27 +1,31 @@
 # -*- coding: utf-8 -*-
 import logging
+import re
+import time
 
+from parsel  import  Selector
 import scrapy
 from gne import GeneralNewsExtractor
-from scrapy.linkextractors import LinkExtractor
 from scrapy.spiders import CrawlSpider, Rule
-from scrapy_splash import SplashRequest
 from HY_NEWS.items import HyNewsItem
 from HY_NEWS.util_custom.tools.attachment import get_times
 from HY_NEWS.util_custom.tools.cate import get_category
+from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
+
+from time import sleep
 
 
-
-script = """
-function main(splash, args)
-  assert(splash:go(args.url))
-  assert(splash:wait(0.5))
-  return {
-    html = splash:html(),
-    har = splash:har(),
-  }
-end
-"""
+# script = """
+# function main(splash, args)
+#   assert(splash:go(args.url))
+#   assert(splash:wait(0.5))
+#   return {
+#     html = splash:html(),
+#     har = splash:har(),
+#   }
+# end
+# """
 class SohuAutoSpider(CrawlSpider):
     name = 'sohu_auto'
     allowed_domains = ['auto.sohu.com']
@@ -57,23 +61,45 @@ class SohuAutoSpider(CrawlSpider):
             # 重试中间件
             'HY_NEWS.util_custom.middleware.middlewares.MyRetryMiddleware': 90,
         },
-        # 调用 scrapy_splash 打开此设置
-        'SPIDER_MIDDLEWARES': {
-            'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
-        },
-        # 去重/api端口
-        'DUPEFILTER_CLASS': 'scrapy_splash.SplashAwareDupeFilter',
-        # # 'SPLASH_URL': "http://10.8.32.122:8050/"
-        'SPLASH_URL': "http://127.0.0.1:8050/"
+        # # 调用 scrapy_splash 打开此设置
+        # 'SPIDER_MIDDLEWARES': {
+        #     'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+        # },
+        # # 去重/api端口
+        # 'DUPEFILTER_CLASS': 'scrapy_splash.SplashAwareDupeFilter',
+        # # # 'SPLASH_URL': "http://10.8.32.122:8050/"
+        # 'SPLASH_URL': "http://127.0.0.1:8050/"
     }
 
     def start_requests(self):
-        url ='http://auto.sohu.com/qichexinwen.shtml'
-        yield SplashRequest(url, args={'lua_source': script, 'wait': 1}, callback=self.parse,dont_filter=True)
+        chrome_options = Options()
+        chrome_options.add_argument("--disable-extensions")
+        driver = webdriver.Chrome(r'HY_NEWS/util_custom/chromedriver', chrome_options=chrome_options)
+        url = 'http://auto.sohu.com/qichexinwen.shtml'
+        driver.get(url)
+        url_export = []
+        js = 'var q=document.documentElement.scrollTop=16000'
+        for x in range(1, 10):
+            driver.execute_script(js)
+            time.sleep(2)
+            respo = driver.page_source
+            source = Selector(respo)
+            get_url = source.css('a::attr(href)').extract()
+            get_urls = re.findall('//w+.\w+.\w+/\w/\d+_\d+.*?', ''.join(get_url))
+            for url in get_urls:
+                url_export.append(url)
+        driver.quit()
+        url_export = list(set(url_export))
+        for url in url_export:
+            url  = 'https:'+url
+            yield scrapy.Request(url,callback=self.parse_item,dont_filter=True)
 
-    def parse(self, response):
-        resp =response
-        print(type(resp))
+
+
+
+    # def parse(self, response):
+    #     resp =response
+    #     print(type(resp))
 
     def parse_item(self, response):
         item = HyNewsItem()
@@ -84,11 +110,7 @@ class SohuAutoSpider(CrawlSpider):
         txt = result['content']
         p_time = result['publish_time']
         content_css = [
-            '.TRS_Editor',
-            '.detail_content',
-            '.block_left',
-            '.detail_content',
-            '.content-text',
+            '.article-text',
         ]
         lyurl = response.url
         lyname = '搜狐汽车'

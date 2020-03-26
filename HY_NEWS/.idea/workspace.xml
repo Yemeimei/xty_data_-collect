@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7b87fc08-12c4-414c-bac7-96d884fe1796" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/yemiemie.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../YanB/YanB/test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../YanB/YanB/util_custom/chromedriver" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HY_NEWS/spiders/YiYao.py" beforeDir="false" afterPath="$PROJECT_DIR$/HY_NEWS/spiders/YiYao.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/HY_NEWS/spiders/sohu_auto.py" beforeDir="false" afterPath="$PROJECT_DIR$/HY_NEWS/spiders/sohu_auto.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,6 +31,12 @@
       </set>
     </option>
   </component>
+  <component name="JsFlowSettings">
+    <service-enabled>true</service-enabled>
+    <exe-path />
+    <other-services-enabled>true</other-services-enabled>
+    <auto-save>true</auto-save>
+  </component>
   <component name="ProjectId" id="1ZGFCPZTEF155uwZ6sS938bY0rf" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -37,6 +46,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
@@ -46,7 +56,7 @@
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="fileTemplates" />
   </component>
   <component name="RunManager" selected="Python.test">
     <configuration name="cate" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -126,7 +136,8 @@
       <workItem from="1584459375194" duration="16167000" />
       <workItem from="1584482751368" duration="5000" />
       <workItem from="1584536375641" duration="20000" />
-      <workItem from="1584894943496" duration="4072000" />
+      <workItem from="1584894943496" duration="6902000" />
+      <workItem from="1585209733425" duration="8007000" />
     </task>
     <servers />
   </component>
@@ -134,29 +145,37 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state width="1398" height="352" key="GridCell.Tab.0.bottom" timestamp="1584478486829">
+    <state x="320" y="115" key="#Web_Browsers" timestamp="1585211074489">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="352" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1584478486829" />
-    <state width="1398" height="352" key="GridCell.Tab.0.center" timestamp="1584478486826">
+    <state x="320" y="115" key="#Web_Browsers/0.0.1440.900@0.0.1440.900" timestamp="1585211074489" />
+    <state width="1398" height="351" key="GridCell.Tab.0.bottom" timestamp="1585216246950">
+      <screen x="0" y="23" width="1440" height="788" />
+    </state>
+    <state width="1398" height="458" key="GridCell.Tab.0.bottom/0.0.1440.900@0.0.1440.900" timestamp="1585215460386" />
+    <state width="1398" height="351" key="GridCell.Tab.0.bottom/0.23.1440.788@0.23.1440.788" timestamp="1585216246950" />
+    <state width="1398" height="351" key="GridCell.Tab.0.center" timestamp="1585216246949">
+      <screen x="0" y="23" width="1440" height="788" />
+    </state>
+    <state width="1398" height="458" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1585215460385" />
+    <state width="1398" height="351" key="GridCell.Tab.0.center/0.23.1440.788@0.23.1440.788" timestamp="1585216246949" />
+    <state width="1398" height="351" key="GridCell.Tab.0.left" timestamp="1585216246948">
+      <screen x="0" y="23" width="1440" height="788" />
+    </state>
+    <state width="1398" height="458" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1585215460384" />
+    <state width="1398" height="351" key="GridCell.Tab.0.left/0.23.1440.788@0.23.1440.788" timestamp="1585216246948" />
+    <state width="1398" height="351" key="GridCell.Tab.0.right" timestamp="1585216246949">
+      <screen x="0" y="23" width="1440" height="788" />
+    </state>
+    <state width="1398" height="458" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1585215460385" />
+    <state width="1398" height="351" key="GridCell.Tab.0.right/0.23.1440.788@0.23.1440.788" timestamp="1585216246949" />
+    <state x="229" y="89" key="SettingsEditor" timestamp="1584902893164">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
-    <state width="1398" height="352" key="GridCell.Tab.0.center/0.0.1440.900@0.0.1440.900" timestamp="1584478486826" />
-    <state width="1398" height="352" key="GridCell.Tab.0.left" timestamp="1584478486824">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state width="1398" height="352" key="GridCell.Tab.0.left/0.0.1440.900@0.0.1440.900" timestamp="1584478486824" />
-    <state width="1398" height="352" key="GridCell.Tab.0.right" timestamp="1584478486827">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state width="1398" height="352" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1584478486827" />
-    <state x="229" y="89" key="SettingsEditor" timestamp="1584898166717">
-      <screen x="0" y="0" width="1440" height="900" />
-    </state>
-    <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1584898166717" />
+    <state x="229" y="89" key="SettingsEditor/0.0.1440.900@0.0.1440.900" timestamp="1584902893164" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/HY_NEWS$cate.coverage" NAME="cate Coverage Results" MODIFIED="1584471464722" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/HY_NEWS/util_custom/tools" />
-    <SUITE FILE_PATH="coverage/HY_NEWS$test.coverage" NAME="test Coverage Results" MODIFIED="1584478376963" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/HY_NEWS$test.coverage" NAME="test Coverage Results" MODIFIED="1585216216507" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
