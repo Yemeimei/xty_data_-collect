@@ -1,7 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7b87fc08-12c4-414c-bac7-96d884fe1796" name="Default Changelist" comment="" />
+    <list default="true" id="7b87fc08-12c4-414c-bac7-96d884fe1796" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../HAIGUAN/HAIGUAN/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HAIGUAN/HAIGUAN/items.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HAIGUAN/HAIGUAN/pipelines.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HAIGUAN/HAIGUAN/settings.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HAIGUAN/HAIGUAN/spiders/HGZS_TJKX.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HAIGUAN/HAIGUAN/spiders/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HAIGUAN/HAIGUAN/util_custom/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HAIGUAN/HAIGUAN/util_custom/middleware/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HAIGUAN/HAIGUAN/util_custom/middleware/middlewares.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HAIGUAN/HAIGUAN/util_custom/tools/BloomFilter.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HAIGUAN/HAIGUAN/util_custom/tools/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HAIGUAN/HAIGUAN/util_custom/tools/attachment.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HAIGUAN/HAIGUAN/util_custom/tools/cate.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HAIGUAN/scrapy.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/.idea/HY_NEWS.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/items.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/pipelines.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/settings.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/SH_biomedical.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/anhui_hysd.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/chengdu.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/china_ocean.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/hunan.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/jiangsu.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/ningbo.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/shanghai.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/shanghai_Aship.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/shanxi.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/shenzhen.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/shenzhen_clxh.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/shenzhen_csgdjt.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/shenzhen_data.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/xiamen.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/zhejiang.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/spiders/zhejiang_clxh.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/util_custom/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/util_custom/middleware/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/util_custom/middleware/middlewares.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/util_custom/tools/BloomFilter.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/util_custom/tools/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/util_custom/tools/attachment.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/HYXH/util_custom/tools/cate.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/scrapy.cfg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HYXH/test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../HY_IDC.py" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -130,7 +186,7 @@
       <workItem from="1584482751368" duration="5000" />
       <workItem from="1584536375641" duration="20000" />
       <workItem from="1584894943496" duration="6902000" />
-      <workItem from="1585209733425" duration="8007000" />
+      <workItem from="1585209733425" duration="8244000" />
     </task>
     <servers />
   </component>
@@ -142,6 +198,10 @@
       <screen x="0" y="0" width="1440" height="900" />
     </state>
     <state x="320" y="115" key="#Web_Browsers/0.0.1440.900@0.0.1440.900" timestamp="1585211074489" />
+    <state x="331" y="23" key="CommitChangelistDialog2" timestamp="1585229872687">
+      <screen x="0" y="23" width="1440" height="795" />
+    </state>
+    <state x="331" y="23" key="CommitChangelistDialog2/0.23.1440.795@0.23.1440.795" timestamp="1585229872687" />
     <state width="1398" height="351" key="GridCell.Tab.0.bottom" timestamp="1585216246950">
       <screen x="0" y="23" width="1440" height="788" />
     </state>
@@ -162,6 +222,10 @@
     </state>
     <state width="1398" height="458" key="GridCell.Tab.0.right/0.0.1440.900@0.0.1440.900" timestamp="1585215460385" />
     <state width="1398" height="351" key="GridCell.Tab.0.right/0.23.1440.788@0.23.1440.788" timestamp="1585216246949" />
+    <state x="569" y="137" key="RollbackChangesDialog" timestamp="1585229869007">
+      <screen x="0" y="23" width="1440" height="795" />
+    </state>
+    <state x="569" y="137" key="RollbackChangesDialog/0.23.1440.795@0.23.1440.795" timestamp="1585229869007" />
     <state x="229" y="89" key="SettingsEditor" timestamp="1584902893164">
       <screen x="0" y="0" width="1440" height="900" />
     </state>
