@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7b87fc08-12c4-414c-bac7-96d884fe1796" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/yemiemie.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../YanB/YanB/test.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../YanB/YanB/util_custom/chromedriver" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/HY_NEWS/spiders/sohu_auto.py" beforeDir="false" afterPath="$PROJECT_DIR$/HY_NEWS/spiders/sohu_auto.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
-    </list>
+    <list default="true" id="7b87fc08-12c4-414c-bac7-96d884fe1796" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
