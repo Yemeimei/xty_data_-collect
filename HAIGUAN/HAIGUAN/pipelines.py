@@ -1,4 +1,3 @@
-@@ -1,92 +0,0 @@
 # -*- coding: utf-8 -*-
 
 # Define your item pipelines here

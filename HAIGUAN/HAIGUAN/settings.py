@@ -1,4 +1,3 @@
-@@ -1,41 +0,0 @@
 # -*- coding: utf-8 -*-
 
 # Scrapy settings for HAIGUAN project
