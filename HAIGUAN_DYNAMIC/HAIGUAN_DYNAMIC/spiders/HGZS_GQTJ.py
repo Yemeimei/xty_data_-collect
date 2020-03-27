@@ -74,7 +74,7 @@ class HgzsGqtjSpider(scrapy.Spider):
             yield scrapy.Request(url, callback=self.parse_list, meta=response.meta, dont_filter=True)
 
     def parse_list(self, response):
-        for href in response.css('.conList_ul a::attr(href)').extract():
+        for href in response.css('.conList_ull a::attr(href)').extract():
             url = response.urljoin(href).strip()
             if (url.endswith('.html') or url.endswith('.htm')) and url.startswith('http://') and (
                     url != response.url):

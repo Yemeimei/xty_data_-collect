@@ -64,7 +64,6 @@ class BjhgTjfxSpider(scrapy.Spider):
     def parse_total(self, response):
         page_count = int(response.css(
             'input[name=article_paging_list_hidden]::attr(totalpage)').extract_first())
-        page_count = 1
         page_id = response.css(
             '#eprotalCurrentPageId::attr(value)').extract_first()
         module_id = response.css(
