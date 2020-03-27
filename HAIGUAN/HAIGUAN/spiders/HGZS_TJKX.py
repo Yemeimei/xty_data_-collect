@@ -63,7 +63,7 @@ class HgzsTjkxSpider(scrapy.Spider):
             logging.exception(e)
 
     def parse_list(self, response):
-        for href in response.css('.conList_ull a::attr(href)').extract():
+        for href in response.css('.conList_ul a::attr(href)').extract():
             try:
                 url = response.urljoin(href)
                 # logging.error(url)
