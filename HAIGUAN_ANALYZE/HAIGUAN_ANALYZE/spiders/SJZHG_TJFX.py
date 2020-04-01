@@ -5,11 +5,11 @@ from HAIGUAN_ANALYZE.items import HaiguanAnalyzeItem
 from HAIGUAN_ANALYZE.util_custom.tools.attachment import get_attachments, get_times
 
 
-class BjhgTjfxSpider(scrapy.Spider):
-    name = 'BJHG_TJFX'
-    # allowed_domains = ['http://beijing.customs.gov.cn/beijing_customs/434756/434773/434775/index.html']
+class SjzhgTjfxSpider(scrapy.Spider):
+    name = 'SJZHG_TJFX'
+    # allowed_domains = ['http://shijiazhuang.customs.gov.cn/shijiazhuang_customs/456977/456981/456982/index.html']
     start_urls = [
-        'http://beijing.customs.gov.cn/beijing_customs/434756/434773/434775/index.html']
+        'http://shijiazhuang.customs.gov.cn/shijiazhuang_customs/456977/456981/456982/index.html']
 
     custom_settings = {
         # 并发请求
@@ -57,7 +57,7 @@ class BjhgTjfxSpider(scrapy.Spider):
             '#eprotalCurrentPageId::attr(value)').extract_first()
         module_id = response.css(
             'input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
-        url = 'http://beijing.customs.gov.cn/eportal/ui?pageId=' + page_id + \
+        url = 'http://shijiazhuang.customs.gov.cn/eportal/ui?pageId=' + page_id + \
               '&currentPage=1&moduleId=' + module_id + '&staticRequest=yes'
         yield scrapy.Request(url, callback=self.parse_total, meta=response.meta, dont_filter=True)
 
@@ -69,8 +69,8 @@ class BjhgTjfxSpider(scrapy.Spider):
         module_id = response.css(
             'input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
         for page_num in range(page_count):
-            url = 'http://beijing.customs.gov.cn/eportal/ui?pageId=' + page_id + '&currentPage=' + \
-                  str(page_num + 1) + '&moduleId=' + module_id + '&staticRequest=yes'
+            url = 'http://shijiazhuang.customs.gov.cn/eportal/ui?pageId=' + page_id + \
+                '&currentPage=' + str(page_num + 1) + '&moduleId=' + module_id + '&staticRequest=yes'
             yield scrapy.Request(url, callback=self.parse_list, meta=response.meta, dont_filter=True)
 
     def parse_list(self, response):
@@ -89,14 +89,14 @@ class BjhgTjfxSpider(scrapy.Spider):
                 response.css('meta[name=PubDate]::attr(content)').extract_first())
             item['content'] = response.css('#easysiteText').extract_first()
             item['appendix'] = ''
-            item['name'] = '中华人民共和国北京海关'
-            item['website'] = '中华人民共和国北京海关-统计分析'
+            item['name'] = '中华人民共和国石家庄海关'
+            item['website'] = '中华人民共和国石家庄海关-统计分析'
             item['link'] = response.url
             item['appendix_name'] = ''
             item['txt'] = ''.join(
                 response.css('#easysiteText *::text').extract())
-            item['module_name'] = '中华人民共和国北京海关-统计分析'
-            item['spider_name'] = 'BJHG_TJFX'
+            item['module_name'] = '中华人民共和国石家庄海关-统计分析'
+            item['spider_name'] = 'SJZHG_TJFX'
             print(
                 "===========================>crawled one item" +
                 response.request.url)

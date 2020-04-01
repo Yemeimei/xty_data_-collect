@@ -67,7 +67,7 @@ class BjhgTjsjSpider(scrapy.Spider):
         module_id = response.css(
             'input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
         for page_num in range(page_count):
-            url = 'http://www.customs.gov.cn/eportal/ui?pageId=' + page_id + '&currentPage=' + \
+            url = 'http://beijing.customs.gov.cn/eportal/ui?pageId=' + page_id + '&currentPage=' + \
                   str(page_num + 1) + '&moduleId=' + module_id + '&staticRequest=yes'
             # logging.error(url)
             yield scrapy.Request(url, callback=self.parse_list, meta=response.meta, dont_filter=True)
