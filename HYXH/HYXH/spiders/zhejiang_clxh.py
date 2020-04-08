@@ -14,9 +14,6 @@ from HYXH.util_custom.tools.attachment import get_attachments, get_times
 class HySpider(CrawlSpider):
     name = 'zhejiang_clxh'
     allowed_domains = ['www.xclcy.com']
-    start_urls = [
-        f'http://www.xclcy.com/info/list.php?catid=2374&page={x}'for x in range(1, 10)
-    ]
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
@@ -57,45 +54,52 @@ class HySpider(CrawlSpider):
         # # 'SPLASH_URL': "http://10.8.32.122:8050/"
         # 'SPLASH_URL': "http://127.0.0.1:8050/"
     }
-    # def start_requests(self):
-        # pass
 
-    rules = (
-        Rule(LinkExtractor(restrict_css='.in_info_con a'), callback='parse_items', follow=True),
-    )
+    def start_requests(self):
+        for x in range(1, 2):
+            yield scrapy.Request('http://www.xclcy.com/info/list.php?catid=2374&page=' + str(x), callback=self.parse)
+
+    def parse(self, response):
+        print(response.text)
+        urls = response.css(".ind_all_news4 a::attr(href)")
+        print(urls)
+        # for url in urls:
+        #     print(url)
+        #     yield scrapy.Request(url, callback=self.parse_items, dont_filter=True)
 
     def parse_items(self, response):
         lyurl = response.url
-        extractor = GeneralNewsExtractor()
-        resp = response.text
-        result = extractor.extract(resp, with_body_html=False)
-        title = response.css('.titles::text').extract_first()
-        txt = result['content']
-        publish_time = result['publish_time']
-        time = get_times(publish_time)
-        item = HyxhItem()
-        content_css = [
-            'content'
-        ]
-        for content in content_css:
-            content = ''.join(response.css(content).extract())
-            if content:
-                break
-            if not content:
-                logging.warning(f'{response.url}' + '当前url无 css 适配未提取 centent')
-        item['title'] = title
-        appendix, appendix_name = get_attachments(response)
-        item['appendix'] = appendix
-        item['source'] = '浙江省新材料产业协会'
-        item['website'] = '浙江省新材料产业协会'
-        item['link'] = lyurl
-        item['appendix_name'] = appendix_name
-        item['type'] = 1
-        item['tags'] = ''
-        item['time'] = time
-        item['content'] = content
-        item['txt'] = txt
-        item['spider_name'] = 'zhejiang_clxh'
-        item['module_name'] = '行业协会'
-        yield item
+        print(response)
+        # extractor = GeneralNewsExtractor()
+        # resp = response.text
+        # result = extractor.extract(resp, with_body_html=False)
+        # title = response.css('.titles::text').extract_first()
+        # txt = result['content']
+        # publish_time = result['publish_time']
+        # time = get_times(publish_time)
+        # item = HyxhItem()
+        # content_css = [
+        #     'content'
+        # ]
+        # for content in content_css:
+        #     content = ''.join(response.css(content).extract())
+        #     if content:
+        #         break
+        #     if not content:
+        #         logging.warning(f'{response.url}' + '当前url无 css 适配未提取 centent')
+        # item['title'] = title
+        # appendix, appendix_name = get_attachments(response)
+        # item['appendix'] = appendix
+        # item['source'] = '浙江省新材料产业协会'
+        # item['website'] = '浙江省新材料产业协会'
+        # item['link'] = lyurl
+        # item['appendix_name'] = appendix_name
+        # item['type'] = 1
+        # item['tags'] = ''
+        # item['time'] = time
+        # item['content'] = content
+        # item['txt'] = txt
+        # item['spider_name'] = 'zhejiang_clxh'
+        # item['module_name'] = '行业协会'
+        # yield item
 

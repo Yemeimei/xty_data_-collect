@@ -13,7 +13,7 @@ from HYXH.util_custom.tools.attachment import get_attachments, get_times
 
 class HySpider(CrawlSpider):
     name = 'shanghai_Aship'
-    allowed_domains = ['www.caoe.org.cn']
+    allowed_domains = ['www.ssnaoe.org']
     start_urls = [
         f'http://www.ssnaoe.org/shcbyhy/node3/n6/index{x}.html'for x in range(1, 172)
     ]
