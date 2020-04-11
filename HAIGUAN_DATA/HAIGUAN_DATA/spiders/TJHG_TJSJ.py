@@ -91,12 +91,12 @@ class TjhgTjsjSpider(scrapy.Spider):
             item['content'] = response.css('#easysiteText').extract_first()
             item['appendix'] = ''
             item['name'] = '中华人民共和国天津海关'
-            item['website'] = '中华人民共和国天津海关-关区统计'
+            item['website'] = '中华人民共和国天津海关-统计数据'
             item['link'] = response.url
             item['appendix_name'] = ''
             item['txt'] = ''.join(
                 response.css('#easysiteText *::text').extract())
-            item['module_name'] = '中华人民共和国天津海关-统计分析'
+            item['module_name'] = '中华人民共和国天津海关-统计数据'
             item['spider_name'] = 'TJHG_TJSJ'
             print(
                 "===========================>crawled one item" +

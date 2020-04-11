@@ -4,10 +4,11 @@ import logging
 from HAIGUAN_DATA.items import HaiguanDataItem
 from HAIGUAN_DATA.util_custom.tools.attachment import get_attachments, get_times
 
-class BjhgTjsjSpider(scrapy.Spider):
-    name = 'BJHG_TJSJ'
-    # allowed_domains = ['http://www.customs.gov.cn/customs/xwfb34/302262/302265/index.html']
-    start_urls = ['http://beijing.customs.gov.cn/beijing_customs/434756/434773/434774/index.html']
+
+class TyhgBgtjSpider(scrapy.Spider):
+    name = 'TYHG_BGTJ'
+    # allowed_domains = ['http://taiyuan.customs.gov.cn/taiyuan_customs/585802/585812/index.html']
+    start_urls = ['http://taiyuan.customs.gov.cn/taiyuan_customs/585802/585812/index.html']
 
     custom_settings = {
         # 并发请求
@@ -55,7 +56,7 @@ class BjhgTjsjSpider(scrapy.Spider):
             '#eprotalCurrentPageId::attr(value)').extract_first()
         module_id = response.css(
             'input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
-        url = 'http://beijing.customs.gov.cn/eportal/ui?pageId=' + page_id + \
+        url = 'http://taiyuan.customs.gov.cn/eportal/ui?pageId=' + page_id + \
               '&currentPage=1&moduleId=' + module_id + '&staticRequest=yes'
         yield scrapy.Request(url, callback=self.parse_total, meta=response.meta, dont_filter=True)
 
@@ -67,7 +68,7 @@ class BjhgTjsjSpider(scrapy.Spider):
         module_id = response.css(
             'input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
         for page_num in range(page_count):
-            url = 'http://beijing.customs.gov.cn/eportal/ui?pageId=' + page_id + '&currentPage=' + \
+            url = 'http://taiyuan.customs.gov.cn/eportal/ui?pageId=' + page_id + '&currentPage=' + \
                   str(page_num + 1) + '&moduleId=' + module_id + '&staticRequest=yes'
             # logging.error(url)
             yield scrapy.Request(url, callback=self.parse_list, meta=response.meta, dont_filter=True)
@@ -88,14 +89,14 @@ class BjhgTjsjSpider(scrapy.Spider):
                 response.css('meta[name=PubDate]::attr(content)').extract_first())
             item['content'] = response.css('#easysiteText').extract_first()
             item['appendix'] = ''
-            item['name'] = '中华人民共和国北京海关'
-            item['website'] = '中华人民共和国北京海关-统计数据'
+            item['name'] = '中华人民共和国太原海关'
+            item['website'] = '中华人民共和国太原海关-本关统计'
             item['link'] = response.url
             item['appendix_name'] = ''
             item['txt'] = ''.join(
                 response.css('#easysiteText *::text').extract())
-            item['module_name'] = '中华人民共和国北京海关-统计数据'
-            item['spider_name'] = 'BJHG_TJSJ'
+            item['module_name'] = '中华人民共和国太原海关-本关统计'
+            item['spider_name'] = 'TYHG_BGTJ'
             print(
                     "===========================>crawled one item" +
                     response.request.url)
@@ -108,4 +109,3 @@ class BjhgTjsjSpider(scrapy.Spider):
                 e.__str__())
             logging.exception(e)
         yield item
-
