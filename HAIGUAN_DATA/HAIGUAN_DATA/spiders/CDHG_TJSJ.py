@@ -88,11 +88,12 @@ class CdhgTjsjSpider(scrapy.Spider):
             item['time'] = get_times(
                 response.css('meta[name=PubDate]::attr(content)').extract_first())
             item['content'] = response.css('#easysiteText').extract_first()
-            item['appendix'] = ''
+            appendix, appendix_name = get_attachments(response)
+            item['appendix'] = appendix
+            item['appendix_name'] = appendix_name
             item['name'] = '中华人民共和国成都海关'
             item['website'] = '中华人民共和国成都海关-统计数据'
             item['link'] = response.url
-            item['appendix_name'] = ''
             item['txt'] = ''.join(
                 response.css('#easysiteText *::text').extract())
             item['module_name'] = '中华人民共和国成都海关-统计数据'
