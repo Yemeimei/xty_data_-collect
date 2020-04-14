@@ -12,7 +12,7 @@ from HYXH.util_custom.tools.attachment import get_attachments, get_times
 
 
 class HySpider(CrawlSpider):
-    name = 'zhejiang_clxh'
+    name = 'zhejiang_clxh1'
     allowed_domains = ['www.xclcy.com']
     custom_settings = {
         # 并发请求
@@ -56,8 +56,8 @@ class HySpider(CrawlSpider):
     }
 
     def start_requests(self):
-        for x in range(1, 2):
-            yield scrapy.Request('http://www.xclcy.com/info/list.php?catid=2380&page=' + str(x), callback=self.parse)
+        for x in range(1, 10):
+            yield scrapy.Request('http://www.xclcy.com/info/list.php?catid=2374&page=' + str(x), callback=self.parse)
 
     def parse(self, response):
         start = response.text.index('<div class="body">')
@@ -97,12 +97,12 @@ class HySpider(CrawlSpider):
         item['website'] = '浙江省新材料产业协会'
         item['link'] = lyurl
         item['appendix_name'] = appendix_name
-        item['type'] = 3
+        item['type'] = 1
         item['tags'] = ''
         item['time'] = time
         item['content'] = content
         item['txt'] = txt
-        item['spider_name'] = 'zhejiang_clxh'
+        item['spider_name'] = 'zhejiang_clxh1'
         item['module_name'] = '行业协会'
         yield item
 
