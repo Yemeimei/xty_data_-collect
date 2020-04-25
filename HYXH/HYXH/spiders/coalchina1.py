@@ -75,7 +75,7 @@ class HySpider(CrawlSpider):
         time = get_times(publish_time)
         item = HyxhItem()
         content_css = [
-            '.content'
+            '#Article .content'
         ]
         lyurl = response.url
         for content in content_css:

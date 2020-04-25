@@ -63,7 +63,6 @@ class HySpider(CrawlSpider):
         result = json.loads(response.text)
         for data in result['data']['list']:
             url = 'http://www.cpcia.org.cn/detail/' + str(data['id'])
-            print(url)
             yield scrapy.Request('http://www.cpcia.org.cn/detail/' + str(data['id']), callback=self.parse_items, dont_filter=True)
 
     def parse_items(self, response):

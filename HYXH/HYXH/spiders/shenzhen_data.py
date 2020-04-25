@@ -89,7 +89,7 @@ class HySpider(CrawlSpider):
         item['website'] =  '深圳市城市轨道交通协会'
         item['link'] = lyurl
         item['appendix_name'] = appendix_name
-        item['type'] = 1
+        item['type'] = 2
         item['tags'] = ''
         item['time'] = time
         item['content'] = content

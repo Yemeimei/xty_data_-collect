@@ -14,7 +14,7 @@ from HYXH.util_custom.tools.attachment import get_attachments, get_times
 class HySpider(CrawlSpider):
     name = 'zhejiang'
     allowed_domains = ['www.zrcma.org.cn']
-    start_urls = ['http://www.zrcma.org.cn/information/54/1.html','http://www.zrcma.org.cn/information/54/2.html','http://www.zrcma.org.cn/information/66.html']
+    start_urls = ['http://www.zrcma.org.cn/information/54/1.html','http://www.zrcma.org.cn/information/54/2.html']
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,

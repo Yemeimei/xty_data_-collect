@@ -71,7 +71,9 @@ class HySpider(CrawlSpider):
         result = extractor.extract(resp, with_body_html=False)
         title = response.css('h2::text').extract_first()
         txt = result['content']
-        publish_time = response.xpath('/html/body/div[4]/span[1]/text()').extract_first()
+        publish_time = response.xpath('//div[@class="main2 ma clear"]/span[@class="riqi_1"][1]/text()').extract_first()
+        # publish_time = response.xpath('/html/body/div[4]/span[1]/text()').extract_first()
+        print('publish_time:' + str(publish_time))
         time = get_times(publish_time)
         item = HyxhItem()
         content_css = [

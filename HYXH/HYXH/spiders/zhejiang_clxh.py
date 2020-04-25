@@ -76,7 +76,8 @@ class HySpider(CrawlSpider):
         selector = Selector(text=text)
         lyurl = response.url
         title = selector.css('.titles h1::text').extract_first()
-        publish_time = ''.join(selector.css('.titles .fl::text').extract())
+        publish_times = selector.css('.titles .fl::text').extract()
+        publish_time = publish_times[1]
         time = get_times(publish_time)
         item = HyxhItem()
         content_css = [
@@ -89,7 +90,6 @@ class HySpider(CrawlSpider):
             if not content:
                 logging.warning(f'{response.url}' + '当前url无 css 适配未提取 centent')
         txt = ''.join(selector.xpath('//div[@id="article"]//text()').extract())
-        print(txt)
         item['title'] = title
         appendix, appendix_name = get_attachments(selector)
         item['appendix'] = appendix

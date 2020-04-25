@@ -64,17 +64,17 @@ class HySpider(CrawlSpider):
         extractor = GeneralNewsExtractor()
         resp = response.text
         result = extractor.extract(resp, with_body_html=False)
-        title = response.css('#lblTitle b::text').extract_first()
+        title = response.xpath('/html/body/div[4]/div/div/div[2]/div[3]/div[1]/span/text()').extract_first()
         txt = result['content']
-        publish_time = result['publish_time']
+        publish_time = ''.join(response.xpath('/html/body/div[4]/div/div/div[2]/div[3]/div[2]/text()').extract())
         time = get_times(publish_time)
         item = HyxhItem()
         content_css = [
-            '.rightpage'
+            '/html/body/div[4]/div/div/div[2]/div[3]/div[4]'
         ]
         lyurl = response.url
         for content in content_css:
-            content = ''.join(response.css(content).extract())
+            content = ''.join(response.xpath(content).extract())
             if content:
                 break
             if not content:
