@@ -3,26 +3,27 @@ import scrapy
 import logging
 from HAIGUAN_DATA.items import HaiguanDataItem
 from HAIGUAN_DATA.util_custom.tools.attachment import get_attachments, get_times
+from scrapy.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
 
-
-class TjhgTjsjSpider(scrapy.Spider):
+class TjhgTjsjSpider(CrawlSpider):
     name = 'TJHG_TJSJ'
-    # allowed_domains = ['http://tianjin.customs.gov.cn/tianjin_customs/427875/427909/427911/index.html']
+    allowed_domains = ['tianjin.customs.gov.cn']
     start_urls = [
-        'http://tianjin.customs.gov.cn/tianjin_customs/427875/427909/427911/index.html']
-
+        f'http://tianjin.customs.gov.cn/eportal/ui?pageId=427911&currentPage={x}&moduleId=de85e65757644e1f81191ab4cae200ca&staticRequest=yes' for x in range(1, 34)
+    ]
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
-        'CONCURRENT_REQUESTS_PER_DOMAIN': 1,
+        # 'CONCURRENT_REQUESTS_PER_DOMAIN': 1000000000,
         'CONCURRENT_REQUESTS_PER_IP': 0,
         # 下载暂停
-        'DOWNLOAD_DELAY': 10,
+        'DOWNLOAD_DELAY': 0.5,
         'ITEM_PIPELINES': {
             # 设置异步入库方式
             'HAIGUAN_DATA.pipelines.MysqlTwistedPipeline': 600,
             # 去重逻辑
-            # 'investment_news.pipelines.DuplicatesPipeline': 200,
+            # 'HAIGUAN_DATA.pipelines.DuplicatesPipeline': 200,
         },
         'DOWNLOADER_MIDDLEWARES': {
             # 调用 scrapy_splash 打开此设置
@@ -32,7 +33,7 @@ class TjhgTjsjSpider(scrapy.Spider):
             # 设置设置默认代理
             'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 700,
             # 设置请求代理服务器
-            # 'HAIGUAN.util_custom.middleware.middlewares.ProxyMiddleWare': 100,
+            # 'HAIGUAN_DATA.util_custom.middleware.middlewares.ProxyMiddleWare': 100,
             # 设置scrapy 自带请求头
             'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
             # 自定义随机请求头
@@ -43,51 +44,25 @@ class TjhgTjsjSpider(scrapy.Spider):
             'HAIGUAN_DATA.util_custom.middleware.middlewares.MyRetryMiddleware': 90,
         },
         # 调用 scrapy_splash 打开此设置
-        'SPIDER_MIDDLEWARES': {
-            'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
-        },
+        # 'SPIDER_MIDDLEWARES': {
+        #     'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+        # },
         # 去重/api端口
         # 'DUPEFILTER_CLASS': 'scrapy_splash.SplashAwareDupeFilter',
         # # 'SPLASH_URL': "http://10.8.32.122:8050/"
-        'SPLASH_URL': "http://47.106.239.73:8050/"
+        # 'SPLASH_URL': "http://127.0.0.1:8050/"
     }
 
-    def parse(self, response):
-        page_id = response.css(
-            '#eprotalCurrentPageId::attr(value)').extract_first()
-        module_id = response.css(
-            'input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
-        url = 'http://tianjin.customs.gov.cn/eportal/ui?pageId=' + page_id + \
-              '&currentPage=1&moduleId=' + module_id + '&staticRequest=yes'
-        yield scrapy.Request(url, callback=self.parse_total, meta=response.meta, dont_filter=True)
+    rules = (
+        Rule(LinkExtractor(restrict_css='.conList_ul a'), callback='parse_items', follow=True),
+    )
 
-    def parse_total(self, response):
-        page_count = int(response.css(
-            'input[name=article_paging_list_hidden]::attr(totalpage)').extract_first())
-        page_id = response.css(
-            '#eprotalCurrentPageId::attr(value)').extract_first()
-        module_id = response.css(
-            'input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
-        for page_num in range(page_count):
-            url = 'http://tianjin.customs.gov.cn/eportal/ui?pageId=' + page_id + '&currentPage=' + \
-                  str(page_num + 1) + '&moduleId=' + module_id + '&staticRequest=yes'
-            # logging.error(url)
-            yield scrapy.Request(url, callback=self.parse_list, meta=response.meta, dont_filter=True)
-
-    def parse_list(self, response):
-        for href in response.css('.conList_ul a::attr(href)').extract():
-            url = response.urljoin(href).strip()
-
-            if (url.endswith('.html') or url.endswith('.htm')) and url.startswith(
-                    'http://') and (url != response.url):
-                yield scrapy.Request(url, callback=self.parse_item, dont_filter=True)
-
-    def parse_item(self, response):
+    def parse_items(self, response):
         try:
             item = HaiguanDataItem()
             item['title'] = response.css('title::text').extract_first()
             item['time'] = get_times(
-                response.css('meta[name=PubDate]::attr(content)').extract_first())
+                response.css('.easysite-news-describe::text').extract_first())
             item['content'] = response.css('#easysiteText').extract_first()
             appendix, appendix_name = get_attachments(response)
             item['appendix'] = appendix

@@ -32,6 +32,6 @@ MYSQL_HOST = 'rm-8vbif49m6k7l651e5fo.mysql.zhangbei.rds.aliyuncs.com'
 MYSQL_PASSWORD = 'Liqin1988'
 MYSQL_USER = 'root'
 MYSQL_DB = 'python'
-MYSQL_PORT = 3306
 MYSQL_CHRSET = 'utf8'
+MYSQL_PORT = 3306
 LOG_LEVEL = 'INFO'

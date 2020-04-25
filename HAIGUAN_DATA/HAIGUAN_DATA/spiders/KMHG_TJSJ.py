@@ -64,7 +64,7 @@ class KmhgTjsjSpider(scrapy.Spider):
             item = HaiguanDataItem()
             item['title'] = response.css('title::text').extract_first()
             item['time'] = get_times(
-                response.css('meta[name=PubDate]::attr(content)').extract_first())
+                response.css('.easysite-news-describe::text').extract_first())
             item['content'] = response.css('#easysiteText').extract_first()
             appendix, appendix_name = get_attachments(response)
             item['appendix'] = appendix

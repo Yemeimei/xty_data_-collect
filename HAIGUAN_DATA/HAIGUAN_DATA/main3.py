@@ -1,0 +1,1 @@
+# -*- coding: utf-8 -*-import sys,osfrom scrapy.cmdline import executesys.path.append(os.path.abspath(os.path.dirname(__file__)))os.system("scrapy crawl DLHG_TJSJ")os.system("scrapy crawl FZHG_TJSJ")os.system("scrapy crawl GBHG_TJSJ")os.system("scrapy crawl GYHG_BGTJ")os.system("scrapy crawl GZHG_TJSJ")

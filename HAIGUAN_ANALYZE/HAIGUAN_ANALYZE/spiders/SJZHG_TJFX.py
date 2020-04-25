@@ -76,7 +76,6 @@ class SjzhgTjfxSpider(scrapy.Spider):
     def parse_list(self, response):
         for href in response.css('.conList_ul a::attr(href)').extract():
             url = response.urljoin(href).strip()
-
             if (url.endswith('.html') or url.endswith('.htm')) and url.startswith(
                     'http://') and (url != response.url):
                 yield scrapy.Request(url, callback=self.parse_item, dont_filter=True)
@@ -86,7 +85,7 @@ class SjzhgTjfxSpider(scrapy.Spider):
             item = HaiguanAnalyzeItem()
             item['title'] = response.css('title::text').extract_first()
             item['time'] = get_times(
-                response.css('meta[name=PubDate]::attr(content)').extract_first())
+                response.css('.easysite-news-describe::text').extract_first())
             item['content'] = response.css('#easysiteText').extract_first()
             appendix, appendix_name = get_attachments(response)
             item['appendix'] = appendix
