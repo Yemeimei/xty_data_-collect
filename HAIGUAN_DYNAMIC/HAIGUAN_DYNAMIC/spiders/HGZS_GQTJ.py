@@ -88,11 +88,11 @@ class HgzsGqtjSpider(scrapy.Spider):
                 response.css('meta[name=PubDate]::attr(content)').extract_first())
             item['content'] = response.css('#easysiteText').extract_first()
             item['name'] = '中华人民共和国海关总署'
-            item['website'] = '中华人民共和国海关总署-关区统计'
+            item['website'] = '中华人民共和国海关总署-各关动态'
             item['link'] = response.url
             item['txt'] = ''.join(
                 response.css('#easysiteText *::text').extract())
-            item['module_name'] = '中华人民共和国海关总署-关区统计'
+            item['module_name'] = '中华人民共和国海关总署-各关动态'
             item['spider_name'] = 'HGZS_GQTJ'
             print(
                 "===========================>crawled one item" +

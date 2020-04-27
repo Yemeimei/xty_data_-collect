@@ -15,7 +15,7 @@ class HgzsTjkxSpider(scrapy.Spider):
         'CONCURRENT_REQUESTS_PER_DOMAIN': 1,
         'CONCURRENT_REQUESTS_PER_IP': 0,
         # 下载暂停
-        'DOWNLOAD_DELAY': 10,
+        'DOWNLOAD_DELAY': 2,
         'ITEM_PIPELINES': {
             # 设置异步入库方式
             'HAIGUAN.pipelines.MysqlTwistedPipeline': 600,
@@ -86,7 +86,7 @@ class HgzsTjkxSpider(scrapy.Spider):
             item = HaiguanItem()
             item['title'] = response.css('title::text').extract_first()
             item['content'] = response.css('#easysiteText').extract_first()
-            item['time'] = get_times(response.css('meta[name=PubDate]::attr(content)').extract_first())
+            item['time'] = get_times(response.css('.easysite-news-describe::text').extract_first())
             item['website'] = '中华人民共和国海关总署-统计快讯'
             item['link'] = response.url
             item['type'] = '1'
