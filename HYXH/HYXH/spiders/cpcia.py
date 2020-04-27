@@ -77,7 +77,7 @@ class HySpider(CrawlSpider):
         time = get_times(publish_time)
         item = HyxhItem()
         content_css = [
-            '.container'
+            '.detail-container .container'
         ]
         for content in content_css:
             content = ''.join(response.css(content).extract())

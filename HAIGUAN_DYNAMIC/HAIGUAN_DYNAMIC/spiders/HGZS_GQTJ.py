@@ -17,7 +17,7 @@ class HgzsGqtjSpider(scrapy.Spider):
         'CONCURRENT_REQUESTS_PER_DOMAIN': 1,
         'CONCURRENT_REQUESTS_PER_IP': 0,
         # 下载暂停
-        'DOWNLOAD_DELAY': 10,
+        'DOWNLOAD_DELAY': 1,
         'ITEM_PIPELINES': {
             # 设置异步入库方式
             'HAIGUAN_DYNAMIC.pipelines.MysqlTwistedPipeline': 600,
