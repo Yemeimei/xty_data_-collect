@@ -1,24 +1,19 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for HAIGUAN project
+# Scrapy settings for SHQC project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
 #
-#     https://docs.scrapy.org/en/latest/topics/settings.html
-#     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+#     https://doc.scrapy.org/en/latest/topics/settings.html
+#     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
+#     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'HAIGUAN_DATA'
+BOT_NAME = 'SHQC'
 
-SPIDER_MODULES = ['HAIGUAN_DATA.spiders']
-NEWSPIDER_MODULE = 'HAIGUAN_DATA.spiders'
+SPIDER_MODULES = ['SHQC.spiders']
+NEWSPIDER_MODULE = 'SHQC.spiders'
 
-
-# Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'HAIGUAN (+http://www.yourdomain.com)'
-
-# Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 
 MYSQL_HOST = '10.8.32.125'
