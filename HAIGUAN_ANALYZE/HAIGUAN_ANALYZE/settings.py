@@ -20,7 +20,7 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
-
+COOKIES_ENABLED = True
 MYSQL_HOST = '10.8.32.125'
 MYSQL_PASSWORD = 'Admin123!'
 MYSQL_USER = 'root'

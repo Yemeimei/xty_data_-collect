@@ -12,7 +12,8 @@ from scrapy import signals
 from scrapy.downloadermiddlewares.retry import RetryMiddleware
 from scrapy.utils.response import response_status_message
 
-
+from time import sleep
+from scrapy.http import HtmlResponse
 
 
 count  =1
@@ -48,12 +49,20 @@ class ProxyMiddleWare(object):
         # return  requests.get('http://47.111.84.71:5010/get/').text
         return requests.get('http://127.0.0.1:5010/get/').text
 
+class WangyiproDownloaderMiddleware(object):
+    #拦截所有的响应对象
+    def process_response(self, request,response, spider):
+        if response.status == 412:
+            print(response.status)
+            response.status = 209
+        return response
 
 class MyUserAgentMiddleware(object):
     def __init__(self, user_agent=''):
         self.user_agent = user_agent
 
     def process_request(self, request, spider):
+        request.cookies = spider.cookie
         self.ua = random.choice(self.User_Agent_list)
         request.headers.setdefault('User-Agent', self.ua)
 
