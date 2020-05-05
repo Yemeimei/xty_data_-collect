@@ -21,11 +21,11 @@ NEWSPIDER_MODULE = 'HAIGUAN_DATA.spiders'
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 COOKIES_ENABLED = True
-MYSQL_HOST = '10.8.32.125'
-MYSQL_PASSWORD = 'Admin123!'
-MYSQL_USER = 'root'
-MYSQL_DB = 'engineering-brain'
-MYSQL_CHRSET = 'utf8'
+# MYSQL_HOST = '10.8.32.125'
+# MYSQL_PASSWORD = 'Admin123!'
+# MYSQL_USER = 'root'
+# MYSQL_DB = 'engineering-brain'
+# MYSQL_CHRSET = 'utf8'
 
 # MYSQL_HOST = '127.0.0.1'
 # MYSQL_PASSWORD = 'yeyang112114'
@@ -33,10 +33,10 @@ MYSQL_CHRSET = 'utf8'
 # MYSQL_DB = 'engineering-brain'
 # MYSQL_CHRSET = 'utf8'
 
-# MYSQL_HOST = 'rm-8vbif49m6k7l651e5fo.mysql.zhangbei.rds.aliyuncs.com'
-# MYSQL_PASSWORD = 'Liqin1988'
-# MYSQL_USER = 'root'
-# MYSQL_DB = 'python'
-# MYSQL_CHRSET = 'utf8'
+MYSQL_HOST = 'rm-8vbif49m6k7l651e5fo.mysql.zhangbei.rds.aliyuncs.com'
+MYSQL_PASSWORD = 'Liqin1988'
+MYSQL_USER = 'root'
+MYSQL_DB = 'python'
+MYSQL_CHRSET = 'utf8'
 MYSQL_PORT = 3306
 LOG_LEVEL = 'INFO'

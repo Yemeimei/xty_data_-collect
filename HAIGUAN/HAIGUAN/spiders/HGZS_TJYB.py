@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import scrapy
 import logging
+import json
 from HAIGUAN.items import HaiguanItem
 from HAIGUAN.util_custom.tools.attachment import get_attachments, get_times
 
@@ -11,11 +12,11 @@ class HgzsTjybSpider(scrapy.Spider):
 
     custom_settings = {
         # 并发请求
-        'CONCURRENT_REQUESTS': 10,
+        'CONCURRENT_REQUESTS': 1,
         'CONCURRENT_REQUESTS_PER_DOMAIN': 1,
         'CONCURRENT_REQUESTS_PER_IP': 0,
         # 下载暂停
-        'DOWNLOAD_DELAY': 2,
+        'DOWNLOAD_DELAY': 1,
         'ITEM_PIPELINES': {
             # 设置异步入库方式
             'HAIGUAN.pipelines.MysqlTwistedPipeline': 600,
@@ -35,6 +36,7 @@ class HgzsTjybSpider(scrapy.Spider):
             'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
             # 自定义随机请求头
             'HAIGUAN.util_custom.middleware.middlewares.MyUserAgentMiddleware': 120,
+            'HAIGUAN.util_custom.middleware.middlewares.WangyiproDownloaderMiddleware': 180,
             # 重试中间件
             'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
             # 重试中间件
@@ -49,35 +51,61 @@ class HgzsTjybSpider(scrapy.Spider):
         # # 'SPLASH_URL': "http://10.8.32.122:8050/"
         'SPLASH_URL': "http://47.106.239.73:8050/"
     }
+    def __init__(self, cookie={}, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.cookie = cookie
+
+    def parseCookie(self, response):
+        print(response.text)
+        if len(str(response.text)) > 10:
+            self.cookie = json.loads(response.text)
+        if response.meta['type'] == 'parse_total':
+            yield scrapy.Request(response.meta['url'],  callback=self.parse_total, dont_filter=True)
+        elif response.meta['type'] == 'parse_list':
+            yield scrapy.Request(response.meta['url'],  callback=self.parse_list, dont_filter=True)
+        elif response.meta['type'] == 'parse_item':
+            yield scrapy.Request(response.meta['url'],  callback=self.parse_item, dont_filter=True)
+        else:
+            yield scrapy.Request(response.meta['url'], callback=self.parse, dont_filter=True)
 
     def parse(self, response):
-        for href in response.css('td a.blue::attr(href)').extract():
-            url = response.urljoin(href).strip()
-            if (url.endswith('.html') or url.endswith('.htm')) and url.startswith('http://') and (url != response.url):
-                yield scrapy.Request(url, callback=self.parse_item, meta=response.meta, dont_filter=True)
+        if response.status == 209:
+            urls = 'http://39.96.199.128:8888/getCookie?url=' + str(response.url)
+            yield scrapy.Request(urls, callback=self.parseCookie, meta={'url': str(response.url), 'type': 'parse'},
+                                 dont_filter=True, priority=10)
+        else:
+            for href in response.css('td a.blue::attr(href)').extract():
+                url = response.urljoin(href).strip()
+                if (url.endswith('.html') or url.endswith('.htm')) and url.startswith('http://') and (url != response.url):
+                    yield scrapy.Request(url, callback=self.parse_item, meta=response.meta, dont_filter=True)
 
     def parse_item(self, response):
-        try:
-            item = HaiguanItem()
-            item['title'] = response.css('title::text').extract_first()
-            item['content'] = response.css('#easysiteText').extract_first()
-            item['time'] = get_times(response.css('.easysite-news-describe::text').extract_first())
-            item['website'] = '中华人民共和国海关总署-统计月报'
-            item['link'] = response.url
-            item['type'] = '2'
-            item['source'] = '中华人民共和国海关总署'
-            item['txt'] = ''.join(response.css('#easysiteText *::text').extract())
-            item['module_name'] = '中华人民共和国海关总署-统计月报'
-            item['spider_name'] = 'HGZS_TJYB'
-            print(
-                "===========================>crawled one item" +
-                response.request.url)
-        except Exception as e:
-            logging.error(
-                self.name +
-                " in parse_item: url=" +
-                response.request.url +
-                ", exception=" +
-                e.__str__())
-            logging.exception(e)
-        yield item
+        if response.status == 209:
+            urls = 'http://39.96.199.128:8888/getCookie?url=' + str(response.url)
+            yield scrapy.Request(urls, callback=self.parseCookie, meta={'url': str(response.url), 'type': 'parse_item'},
+                                 dont_filter=True, priority=10)
+        else:
+            try:
+                item = HaiguanItem()
+                item['title'] = response.css('title::text').extract_first()
+                item['content'] = response.css('#easysiteText').extract_first()
+                item['time'] = get_times(response.css('.easysite-news-describe::text').extract_first())
+                item['website'] = '中华人民共和国海关总署-统计月报'
+                item['link'] = response.url
+                item['type'] = '2'
+                item['source'] = '中华人民共和国海关总署'
+                item['txt'] = ''.join(response.css('#easysiteText *::text').extract())
+                item['module_name'] = '中华人民共和国海关总署-统计月报'
+                item['spider_name'] = 'HGZS_TJYB'
+                print(
+                    "===========================>crawled one item" +
+                    response.request.url)
+            except Exception as e:
+                logging.error(
+                    self.name +
+                    " in parse_item: url=" +
+                    response.request.url +
+                    ", exception=" +
+                    e.__str__())
+                logging.exception(e)
+            yield item
