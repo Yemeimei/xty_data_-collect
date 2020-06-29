@@ -9,7 +9,13 @@ from HAIGUAN_DATA.util_custom.tools.attachment import get_attachments, get_times
 class SzhgTjsjSpider(scrapy.Spider):
     name = 'SHHG_TJSJ'
     # allowed_domains = ['http://shenzhen.customs.gov.cn/shenzhen_customs/511686/511692/511693/index.html']
-    start_urls = ['http://shanghai.customs.gov.cn/shanghai_customs/423405/423468/1865071/201975/1y25/index.html']
+    start_urls = ['http://shanghai.customs.gov.cn/shanghai_customs/423405/423468/1865071/2020/2880752/index.html',
+                  'http://shanghai.customs.gov.cn/shanghai_customs/423405/423468/1865071/201975/1y25/index.html',
+                  'http://shanghai.customs.gov.cn/shanghai_customs/423405/423468/1865071/1877437/1877438/index.html',
+                  'http://shanghai.customs.gov.cn/shanghai_customs/423405/423468/1865071/1876299/1876319/index.html',
+                  'http://shanghai.customs.gov.cn/shanghai_customs/423405/423468/1865071/1877546/1877547/index.html',
+                  'http://shanghai.customs.gov.cn/shanghai_customs/423405/423468/1865071/1877645/1877646/index.html',
+                  'http://shanghai.customs.gov.cn/shanghai_customs/423405/423468/1865071/1878176/1878177/index.html']
 
     custom_settings = {
         # 并发请求
