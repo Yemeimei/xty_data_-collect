@@ -13,10 +13,17 @@ from HYXH.util_custom.tools.attachment import get_attachments, get_times
 
 class HySpider(CrawlSpider):
     name = 'anhui_hysd'
-    allowed_domains = ['www.ahyyxh.cn']
+    allowed_domains = ['ahyyxh.cn']
     start_urls = [
-        f'http://www.ahyyxh.cn/rdjj-list-{x}.html'
-        for x in range(1, 41)]
+        f'http://ahyyxh.cn/rdjj-list-{x}.html'
+        for x in range(1, 42)
+    ]
+
+    start_urls = start_urls + [
+        f'http://ahyyxh.cn/wjsj-list-{x}.html'
+        for x in range(1, 5)
+    ]
+
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
@@ -88,7 +95,7 @@ class HySpider(CrawlSpider):
         appendix, appendix_name = get_attachments(response)
         item['appendix'] = appendix
         item['source'] = '安徽省医药行业协会'
-        item['website'] =  '安徽省医药行业协会'
+        item['website'] = '安徽省医药行业协会'
         item['link'] = lyurl
         item['appendix_name'] = appendix_name
         item['type'] = 1
