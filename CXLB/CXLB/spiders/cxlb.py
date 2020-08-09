@@ -16,14 +16,14 @@ class HySpider(CrawlSpider):
     allowed_domains = ['db.yaozh.com']
     start_urls = [
         f'https://db.yaozh.com/cxlb?p={x}&pageSize=20'
-        for x in range(1, 77)]
+        for x in range(1, 11)]
     custom_settings = {
         # 并发请求
-        'CONCURRENT_REQUESTS': 10,
+        'CONCURRENT_REQUESTS': 1,
         # 'CONCURRENT_REQUESTS_PER_DOMAIN': 1000000000,
         'CONCURRENT_REQUESTS_PER_IP':0,
         # 下载暂停
-        'DOWNLOAD_DELAY': 0.5,
+        'DOWNLOAD_DELAY': 10,
         'ITEM_PIPELINES': {
             # 设置异步入库方式
             'CXLB.pipelines.MysqlTwistedPipeline': 600,
