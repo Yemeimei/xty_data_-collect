@@ -16,7 +16,7 @@ class HySpider(CrawlSpider):
     allowed_domains = ['www.coalchina.org.cn']
     start_urls = [
         f'http://www.coalchina.org.cn/index.php?m=content&c=index&a=lists&catid=67&page={x}'
-        for x in range(1, 36)]
+        for x in range(1, 37)]
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,

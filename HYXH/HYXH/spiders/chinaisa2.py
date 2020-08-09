@@ -61,7 +61,7 @@ class HySpider(CrawlSpider):
                 'Content-Type':' application/x-www-form-urlencoded',
                 'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36'
             }
-            for x in range(1, 2):
+            for x in range(1, 3):
                 formData = {
                      'params': '%7B%22columnId%22:%222e3c87064bdfc0e43d542d87fce8bcbc8fe0463d5a3da04d7e11b4c7d692194b%22,%22param%22:%22%257B%2522pageNo%2522:'+str(x)+',%2522pageSize%2522:25%257D%22%7D'
                 }
