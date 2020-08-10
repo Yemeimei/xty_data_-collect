@@ -15,8 +15,9 @@ class HySpider(CrawlSpider):
     name = 'zhejaing_Aship1'
     allowed_domains = ['www.zjship.com.cn']
     start_urls = [
-        f'http://www.zjship.com.cn/zx/zx/index_{x}.html'for x in range(1, 15)
+        f'http://www.zjship.com.cn/zx/zx/index_{x}.html'for x in range(2, 19)
     ]
+    start_urls.insert(0,'http://www.zjship.com.cn/zx/zx/index.html')
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
