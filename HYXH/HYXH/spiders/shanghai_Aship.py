@@ -17,6 +17,8 @@ class HySpider(CrawlSpider):
     start_urls = [
         f'http://www.ssnaoe.org/shcbyhy/node3/n6/index{x}.html'for x in range(1, 172)
     ]
+
+    start_urls.insert(0, 'http://www.ssnaoe.org/shcbyhy/node3/n6/index.html')
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
