@@ -58,12 +58,12 @@ class CshgTjsjSpider(scrapy.Spider):
         self.cookie = cookie
 
         # 重写start_requests方法
-        # def start_requests(self):
-        #     urls = 'http://39.96.199.128:8888/getCookie?url=http://changsha.customs.gov.cn/eportal/ui?pageId=434774&currentPage=1&moduleId=1667380986bc42c583c65be8d74da7d1&staticRequest=yes'
-        #     yield scrapy.Request(urls, callback=self.parseCookie, meta={
-        #         'url': 'http://changsha.customs.gov.cn/eportal/ui?pageId=434774&currentPage=1&moduleId=1667380986bc42c583c65be8d74da7d1&staticRequest=yes',
-        #         'type': 'parse'},
-        #                          dont_filter=True, priority=10)
+        def start_requests(self):
+            urls = 'http://39.96.199.128:8888/getCookie?url=http://changsha.customs.gov.cn/eportal/ui?pageId=434774&currentPage=1&moduleId=1667380986bc42c583c65be8d74da7d1&staticRequest=yes'
+            yield scrapy.Request(urls, callback=self.parseCookie, meta={
+                'url': 'http://changsha.customs.gov.cn/eportal/ui?pageId=434774&currentPage=1&moduleId=1667380986bc42c583c65be8d74da7d1&staticRequest=yes',
+                'type': 'parse'},
+                                 dont_filter=True, priority=10)
 
         def parseCookie(self, response):
             print(response.text)
