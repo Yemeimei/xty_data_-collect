@@ -8,7 +8,7 @@ from HAIGUAN_DATA.util_custom.tools.attachment import get_attachments, get_times
 
 class NjhgTjsjSpider(scrapy.Spider):
     name = 'NJHG_TJSJ'
-    # allowed_domains = ['http://nanjing.customs.gov.cn/nanjing_customs/589281/589288/589289/index.html']
+    allowed_domains = ['nanjing.customs.gov.cn']
     start_urls = ['http://nanjing.customs.gov.cn/nanjing_customs/589281/589288/589289/index.html']
 
     custom_settings = {
@@ -44,39 +44,33 @@ class NjhgTjsjSpider(scrapy.Spider):
             'HAIGUAN_DATA.util_custom.middleware.middlewares.MyRetryMiddleware': 90,
         },
         # 调用 scrapy_splash 打开此设置
-        'SPIDER_MIDDLEWARES': {
-            'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
-        },
+        # 'SPIDER_MIDDLEWARES': {
+        #     'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+        # },
         # 去重/api端口
         # 'DUPEFILTER_CLASS': 'scrapy_splash.SplashAwareDupeFilter',
         # # 'SPLASH_URL': "http://10.8.32.122:8050/"
-        'SPLASH_URL': "http://47.106.239.73:8050/"
+        # 'SPLASH_URL': "http://47.106.239.73:8050/"
     }
 
     def __init__(self, cookie={}, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.cookie = cookie
 
-    # 重写start_requests方法
-    # def start_requests(self):
-    #     urls = 'http://39.96.199.128:8888/getCookie?url=http://nanjing.customs.gov.cn/eportal/ui?pageId=434774&currentPage=1&moduleId=1667380986bc42c583c65be8d74da7d1&staticRequest=yes'
-    #     yield scrapy.Request(urls, callback=self.parseCookie, meta={
-    #         'url': 'http://nanjing.customs.gov.cn/eportal/ui?pageId=434774&currentPage=1&moduleId=1667380986bc42c583c65be8d74da7d1&staticRequest=yes',
-    #         'type': 'parse'},
-    #                          dont_filter=True, priority=10)
-
     def parseCookie(self, response):
-        print(response.text)
-        if len(str(response.text)) > 10:
-            self.cookie = json.loads(response.text)
-        if response.meta['type'] == 'parse_total':
-            yield scrapy.Request(response.meta['url'], callback=self.parse_total, dont_filter=True)
-        elif response.meta['type'] == 'parse_list':
-            yield scrapy.Request(response.meta['url'], callback=self.parse_list, dont_filter=True)
-        elif response.meta['type'] == 'parse_item':
-            yield scrapy.Request(response.meta['url'], callback=self.parse_item, dont_filter=True)
-        else:
-            yield scrapy.Request(response.meta['url'], callback=self.parse, dont_filter=True)
+        try:
+            if len(str(response.text)) > 10:
+                self.cookie = json.loads(response.text)
+            if response.meta['type'] == 'parse_total':
+                yield scrapy.Request(response.meta['url'], callback=self.parse_total, dont_filter=True)
+            elif response.meta['type'] == 'parse_list':
+                yield scrapy.Request(response.meta['url'], callback=self.parse_list, dont_filter=True)
+            elif response.meta['type'] == 'parse_item':
+                yield scrapy.Request(response.meta['url'], callback=self.parse_item, dont_filter=True)
+            else:
+                yield scrapy.Request(response.meta['url'], callback=self.parse, dont_filter=True)
+        except Exception as e:
+            yield scrapy.Request(response.meta['url'] if response.meta['url'] else response.url, callback=self.parse, dont_filter=True)
 
     def parse(self, response):
         if response.status == 209:
@@ -84,31 +78,36 @@ class NjhgTjsjSpider(scrapy.Spider):
             yield scrapy.Request(urls, callback=self.parseCookie, meta={'url': str(response.url), 'type': 'parse'},
                                  dont_filter=True, priority=10)
         else:
-            page_id = response.css(
-                '#eprotalCurrentPageId::attr(value)').extract_first()
-            module_id = response.css(
-                'input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
-            url = 'http://nanjing.customs.gov.cn/eportal/ui?pageId=' + page_id + \
-                  '&currentPage=1&moduleId=' + module_id + '&staticRequest=yes'
-            yield scrapy.Request(url, callback=self.parse_total, meta=response.meta, dont_filter=True)
-
+            try:
+                page_id = response.css(
+                    '#eprotalCurrentPageId::attr(value)').extract_first()
+                module_id = response.css(
+                    'input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
+                url = 'http://nanjing.customs.gov.cn/eportal/ui?pageId=' + page_id + \
+                      '&currentPage=1&moduleId=' + module_id + '&staticRequest=yes'
+                yield scrapy.Request(url, callback=self.parse_total, meta=response.meta, dont_filter=True)
+            except Exception as e:
+                yield scrapy.Request(response.url, callback=self.parse, dont_filter=True)
     def parse_total(self, response):
         if response.status == 209:
             urls = 'http://39.96.199.128:8888/getCookie?url=' + str(response.url)
             yield scrapy.Request(urls, callback=self.parseCookie,
                                  meta={'url': str(response.url), 'type': 'parse_total'}, dont_filter=True, priority=10)
         else:
-            page_count = int(response.css(
-                'input[name=article_paging_list_hidden]::attr(totalpage)').extract_first())
-            page_id = response.css(
-                '#eprotalCurrentPageId::attr(value)').extract_first()
-            module_id = response.css(
-                'input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
-            for page_num in range(page_count):
-                url = 'http://nanjing.customs.gov.cn/eportal/ui?pageId=' + page_id + '&currentPage=' + \
-                      str(page_num + 1) + '&moduleId=' + module_id + '&staticRequest=yes'
-                # logging.error(url)
-                yield scrapy.Request(url, callback=self.parse_list, meta=response.meta, dont_filter=True)
+            try:
+                page_count = int(response.css(
+                    'input[name=article_paging_list_hidden]::attr(totalpage)').extract_first())
+                page_id = response.css(
+                    '#eprotalCurrentPageId::attr(value)').extract_first()
+                module_id = response.css(
+                    'input[name=article_paging_list_hidden]::attr(moduleid)').extract_first()
+                for page_num in range(page_count):
+                    url = 'http://nanjing.customs.gov.cn/eportal/ui?pageId=' + page_id + '&currentPage=' + \
+                          str(page_num + 1) + '&moduleId=' + module_id + '&staticRequest=yes'
+                    # logging.error(url)
+                    yield scrapy.Request(url, callback=self.parse_list, meta=response.meta, dont_filter=True)
+            except Exception as e:
+                yield scrapy.Request(response.url, callback=self.parse, dont_filter=True)
 
     def parse_list(self, response):
         if response.status == 209:
