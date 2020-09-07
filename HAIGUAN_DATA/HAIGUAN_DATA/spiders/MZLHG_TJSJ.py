@@ -8,7 +8,7 @@ from HAIGUAN_DATA.util_custom.tools.attachment import get_attachments, get_times
 
 class MzlhgTjsjSpider(scrapy.Spider):
     name = 'MZLHG_TJSJ'
-    # allowed_domains = ['http://manzhouli.customs.gov.cn/manzhouli_customs/566020/566022/566023/index.html']
+    allowed_domains = ['manzhouli.customs.gov.cn']
     start_urls = ['http://manzhouli.customs.gov.cn/manzhouli_customs/566020/566022/566023/index.html']
 
     custom_settings = {

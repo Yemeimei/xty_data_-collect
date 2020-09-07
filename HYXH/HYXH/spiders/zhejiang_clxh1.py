@@ -89,21 +89,21 @@ class HySpider(CrawlSpider):
                 break
             if not content:
                 logging.warning(f'{response.url}' + '当前url无 css 适配未提取 centent')
-        txt = ''.join(selector.xpath('//div[@id="article"]//text()').extract())
-        print(txt)
-        item['title'] = title
-        appendix, appendix_name = get_attachments(selector)
-        item['appendix'] = appendix
-        item['source'] = '浙江省新材料产业协会'
-        item['website'] = '浙江省新材料产业协会'
-        item['link'] = lyurl
-        item['appendix_name'] = appendix_name
-        item['type'] = 1
-        item['tags'] = ''
-        item['time'] = time
-        item['content'] = content
-        item['txt'] = txt
-        item['spider_name'] = 'zhejiang_clxh1'
-        item['module_name'] = '行业协会'
-        yield item
+        if content:
+            txt = ''.join(selector.xpath('//div[@id="article"]//text()').extract())
+            item['title'] = title
+            appendix, appendix_name = get_attachments(selector)
+            item['appendix'] = appendix
+            item['source'] = '浙江省新材料产业协会'
+            item['website'] = '浙江省新材料产业协会'
+            item['link'] = lyurl
+            item['appendix_name'] = appendix_name
+            item['type'] = 1
+            item['tags'] = ''
+            item['time'] = time
+            item['content'] = content
+            item['txt'] = txt
+            item['spider_name'] = 'zhejiang_clxh1'
+            item['module_name'] = '行业协会'
+            yield item
 

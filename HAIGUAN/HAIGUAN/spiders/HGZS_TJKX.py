@@ -43,30 +43,32 @@ class HgzsTjkxSpider(scrapy.Spider):
             'HAIGUAN.util_custom.middleware.middlewares.MyRetryMiddleware': 90,
         },
         # 调用 scrapy_splash 打开此设置
-        'SPIDER_MIDDLEWARES': {
-            'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
-        },
+        # 'SPIDER_MIDDLEWARES': {
+        #     'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+        # },
         # 去重/api端口
         # 'DUPEFILTER_CLASS': 'scrapy_splash.SplashAwareDupeFilter',
         # # 'SPLASH_URL': "http://10.8.32.122:8050/"
-        'SPLASH_URL': "http://47.106.239.73:8050/"
+        # 'SPLASH_URL': "http://47.106.239.73:8050/"
     }
     def __init__(self, cookie={}, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.cookie = cookie
 
     def parseCookie(self, response):
-        print(response.text)
-        if len(str(response.text)) > 10:
-            self.cookie = json.loads(response.text)
-        if response.meta['type'] == 'parse_total':
-            yield scrapy.Request(response.meta['url'],  callback=self.parse_total, dont_filter=True)
-        elif response.meta['type'] == 'parse_list':
-            yield scrapy.Request(response.meta['url'],  callback=self.parse_list, dont_filter=True)
-        elif response.meta['type'] == 'parse_item':
-            yield scrapy.Request(response.meta['url'],  callback=self.parse_item, dont_filter=True)
-        else:
-            yield scrapy.Request(response.meta['url'], callback=self.parse, dont_filter=True)
+        try:
+            if len(str(response.text)) > 10:
+                self.cookie = json.loads(response.text)
+            if response.meta['type'] == 'parse_total':
+                yield scrapy.Request(response.meta['url'],  callback=self.parse_total, dont_filter=True)
+            elif response.meta['type'] == 'parse_list':
+                yield scrapy.Request(response.meta['url'],  callback=self.parse_list, dont_filter=True)
+            elif response.meta['type'] == 'parse_item':
+                yield scrapy.Request(response.meta['url'],  callback=self.parse_item, dont_filter=True)
+            else:
+                yield scrapy.Request(response.meta['url'], callback=self.parse, dont_filter=True)
+        except Exception as e:
+            yield scrapy.Request(response.meta['url'] if response.meta['url'] else response.url, callback=self.parse, dont_filter=True)
 
     def parse(self, response):
         if response.status == 209:

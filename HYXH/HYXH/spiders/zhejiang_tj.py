@@ -12,9 +12,9 @@ from HYXH.util_custom.tools.attachment import get_attachments, get_times
 
 
 class HySpider(CrawlSpider):
-    name = 'shenzhen_data'
-    allowed_domains = ['wcm.cnautonews.com']
-    start_urls = ['http://wcm.cnautonews.com/pub/gdjt/sjtj/']
+    name = 'zhejiang_tj'
+    allowed_domains = ['www.zrcma.org.cn']
+    start_urls = ['http://www.zrcma.org.cn/information/66.html']
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
@@ -59,7 +59,7 @@ class HySpider(CrawlSpider):
         # pass
 
     rules = (
-        Rule(LinkExtractor(restrict_css='.new a'), callback='parse_items', follow=True),
+        Rule(LinkExtractor(restrict_css='.list-content a'), callback='parse_items', follow=True),
     )
 
     def parse_items(self, response):
@@ -67,13 +67,13 @@ class HySpider(CrawlSpider):
         resp = response.text
         result = extractor.extract(resp, with_body_html=False)
 
-        title = result['title']
+        title = response.css('#rtitle::text').extract_first()
         txt = result['content']
         publish_time = result['publish_time']
         time = get_times(publish_time)
         item = HyxhItem()
         content_css = [
-            '.TRS_Editor'
+            '.entry'
         ]
         lyurl = response.url
         for content in content_css:
@@ -86,15 +86,15 @@ class HySpider(CrawlSpider):
             item['title'] = title
             appendix, appendix_name = get_attachments(response)
             item['appendix'] = appendix
-            item['source'] = '中国城市轨道交通协会-数据统计'
-            item['website'] = '中国城市轨道交通协会-数据统计'
+            item['source'] = '浙江省轨道交通建设与管理协会'
+            item['website'] =  '浙江省轨道交通建设与管理协会'
             item['link'] = lyurl
             item['appendix_name'] = appendix_name
-            item['type'] = 2
+            item['type'] = 3
             item['tags'] = ''
             item['time'] = time
             item['content'] = content
             item['txt'] = txt
-            item['spider_name'] = 'shenzhen_data'
+            item['spider_name'] = 'zhejiang'
             item['module_name'] = '行业协会'
             yield item

@@ -8,7 +8,7 @@ from HAIGUAN_DATA.util_custom.tools.attachment import get_attachments, get_times
 
 class CqhgTjsjSpider(scrapy.Spider):
     name = 'CQHG_TJSJ'
-    # allowed_domains = ['http://chongqing.customs.gov.cn/chongqing_customs/515860/515862/515863/index.html']
+    allowed_domains = ['chongqing.customs.gov.cn']
     start_urls = ['http://chongqing.customs.gov.cn/chongqing_customs/515860/515862/515863/index.html']
 
     custom_settings = {
@@ -44,29 +44,21 @@ class CqhgTjsjSpider(scrapy.Spider):
             'HAIGUAN_DATA.util_custom.middleware.middlewares.MyRetryMiddleware': 90,
         },
         # 调用 scrapy_splash 打开此设置
-        'SPIDER_MIDDLEWARES': {
-            'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
-        },
+        # 'SPIDER_MIDDLEWARES': {
+        #     'scrapy_splash.SplashDeduplicateArgsMiddleware': 100,
+        # },
         # 去重/api端口
         # 'DUPEFILTER_CLASS': 'scrapy_splash.SplashAwareDupeFilter',
         # # 'SPLASH_URL': "http://10.8.32.122:8050/"
-        'SPLASH_URL': "http://47.106.239.73:8050/"
+        # 'SPLASH_URL': "http://47.106.239.73:8050/"
     }
 
     def __init__(self, cookie={}, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.cookie = cookie
 
-        # 重写start_requests方法
-        # def start_requests(self):
-        #     urls = 'http://39.96.199.128:8888/getCookie?url=http://chongqing.customs.gov.cn/eportal/ui?pageId=434774&currentPage=1&moduleId=1667380986bc42c583c65be8d74da7d1&staticRequest=yes'
-        #     yield scrapy.Request(urls, callback=self.parseCookie, meta={
-        #         'url': 'http://chongqing.customs.gov.cn/eportal/ui?pageId=434774&currentPage=1&moduleId=1667380986bc42c583c65be8d74da7d1&staticRequest=yes',
-        #         'type': 'parse'},
-        #                          dont_filter=True, priority=10)
-
-        def parseCookie(self, response):
-            print(response.text)
+    def parseCookie(self, response):
+        try:
             if len(str(response.text)) > 10:
                 self.cookie = json.loads(response.text)
             if response.meta['type'] == 'parse_total':
@@ -77,13 +69,16 @@ class CqhgTjsjSpider(scrapy.Spider):
                 yield scrapy.Request(response.meta['url'], callback=self.parse_item, dont_filter=True)
             else:
                 yield scrapy.Request(response.meta['url'], callback=self.parse, dont_filter=True)
+        except Exception as e:
+            yield scrapy.Request(response.meta['url'] if response.meta['url'] else response.url, callback=self.parse, dont_filter=True)
 
-        def parse(self, response):
-            if response.status == 209:
-                urls = 'http://39.96.199.128:8888/getCookie?url=' + str(response.url)
-                yield scrapy.Request(urls, callback=self.parseCookie, meta={'url': str(response.url), 'type': 'parse'},
-                                     dont_filter=True, priority=10)
-            else:
+    def parse(self, response):
+        if response.status == 209:
+            urls = 'http://39.96.199.128:8888/getCookie?url=' + str(response.url)
+            yield scrapy.Request(urls, callback=self.parseCookie, meta={'url': str(response.url), 'type': 'parse'},
+                                 dont_filter=True, priority=10)
+        else:
+            try:
                 page_id = response.css(
                     '#eprotalCurrentPageId::attr(value)').extract_first()
                 module_id = response.css(
@@ -91,14 +86,17 @@ class CqhgTjsjSpider(scrapy.Spider):
                 url = 'http://chongqing.customs.gov.cn/eportal/ui?pageId=' + page_id + \
                       '&currentPage=1&moduleId=' + module_id + '&staticRequest=yes'
                 yield scrapy.Request(url, callback=self.parse_total, meta=response.meta, dont_filter=True)
+            except Exception as e:
+                yield scrapy.Request(response.url, callback=self.parse, dont_filter=True)
 
-        def parse_total(self, response):
-            if response.status == 209:
-                urls = 'http://39.96.199.128:8888/getCookie?url=' + str(response.url)
-                yield scrapy.Request(urls, callback=self.parseCookie,
-                                     meta={'url': str(response.url), 'type': 'parse_total'}, dont_filter=True,
-                                     priority=10)
-            else:
+    def parse_total(self, response):
+        if response.status == 209:
+            urls = 'http://39.96.199.128:8888/getCookie?url=' + str(response.url)
+            yield scrapy.Request(urls, callback=self.parseCookie,
+                                 meta={'url': str(response.url), 'type': 'parse_total'}, dont_filter=True,
+                                 priority=10)
+        else:
+            try:
                 page_count = int(response.css(
                     'input[name=article_paging_list_hidden]::attr(totalpage)').extract_first())
                 page_id = response.css(
@@ -108,55 +106,56 @@ class CqhgTjsjSpider(scrapy.Spider):
                 for page_num in range(page_count):
                     url = 'http://chongqing.customs.gov.cn/eportal/ui?pageId=' + page_id + '&currentPage=' + \
                           str(page_num + 1) + '&moduleId=' + module_id + '&staticRequest=yes'
-                    # logging.error(url)
                     yield scrapy.Request(url, callback=self.parse_list, meta=response.meta, dont_filter=True)
+            except Exception as e:
+                yield scrapy.Request(response.url, callback=self.parse, dont_filter=True)
 
-        def parse_list(self, response):
-            if response.status == 209:
-                urls = 'http://39.96.199.128:8888/getCookie?url=' + str(response.url)
-                yield scrapy.Request(urls, callback=self.parseCookie,
-                                     meta={'url': str(response.url), 'type': 'parse_list'}, dont_filter=True,
-                                     priority=10)
-            else:
-                for href in response.css('.conList_ul a::attr(href)').extract():
-                    url = response.urljoin(href).strip()
+    def parse_list(self, response):
+        if response.status == 209:
+            urls = 'http://39.96.199.128:8888/getCookie?url=' + str(response.url)
+            yield scrapy.Request(urls, callback=self.parseCookie,
+                                 meta={'url': str(response.url), 'type': 'parse_list'}, dont_filter=True,
+                                 priority=10)
+        else:
+            for href in response.css('.conList_ul a::attr(href)').extract():
+                url = response.urljoin(href).strip()
 
-                    if (url.endswith('.html') or url.endswith('.htm')) and url.startswith(
-                            'http://') and (url != response.url):
-                        yield scrapy.Request(url, callback=self.parse_item, dont_filter=True)
+                if (url.endswith('.html') or url.endswith('.htm')) and url.startswith(
+                        'http://') and (url != response.url):
+                    yield scrapy.Request(url, callback=self.parse_item, dont_filter=True)
 
-        def parse_item(self, response):
-            if response.status == 209:
-                urls = 'http://39.96.199.128:8888/getCookie?url=' + str(response.url)
-                yield scrapy.Request(urls, callback=self.parseCookie,
-                                     meta={'url': str(response.url), 'type': 'parse_item'}, dont_filter=True,
-                                     priority=10)
-            else:
-                try:
-                    item = HaiguanDataItem()
-                    item['title'] = response.css('title::text').extract_first()
-                    item['time'] = get_times(
-                        response.css('.easysite-news-describe::text').extract_first())
-                    item['content'] = response.css('#easysiteText').extract_first()
-                    appendix, appendix_name = get_attachments(response)
-                    item['appendix'] = appendix
-                    item['appendix_name'] = appendix_name
-                    item['name'] = '中华人民共和国重庆海关'
-                    item['website'] = '中华人民共和国重庆海关-统计数据'
-                    item['link'] = response.url
-                    item['txt'] = ''.join(
-                        response.css('#easysiteText *::text').extract())
-                    item['module_name'] = '中华人民共和国重庆海关-统计数据'
-                    item['spider_name'] = 'CQHG_TJSJ'
-                    print(
-                            "===========================>crawled one item" +
-                            response.request.url)
-                except Exception as e:
-                    logging.error(
-                        self.name +
-                        " in parse_item: url=" +
-                        response.request.url +
-                        ", exception=" +
-                        e.__str__())
-                    logging.exception(e)
-                yield item
+    def parse_item(self, response):
+        if response.status == 209:
+            urls = 'http://39.96.199.128:8888/getCookie?url=' + str(response.url)
+            yield scrapy.Request(urls, callback=self.parseCookie,
+                                 meta={'url': str(response.url), 'type': 'parse_item'}, dont_filter=True,
+                                 priority=10)
+        else:
+            try:
+                item = HaiguanDataItem()
+                item['title'] = response.css('title::text').extract_first()
+                item['time'] = get_times(
+                    response.css('.easysite-news-describe::text').extract_first())
+                item['content'] = response.css('#easysiteText').extract_first()
+                appendix, appendix_name = get_attachments(response)
+                item['appendix'] = appendix
+                item['appendix_name'] = appendix_name
+                item['name'] = '中华人民共和国重庆海关'
+                item['website'] = '中华人民共和国重庆海关-统计数据'
+                item['link'] = response.url
+                item['txt'] = ''.join(
+                    response.css('#easysiteText *::text').extract())
+                item['module_name'] = '中华人民共和国重庆海关-统计数据'
+                item['spider_name'] = 'CQHG_TJSJ'
+                print(
+                        "===========================>crawled one item" +
+                        response.request.url)
+            except Exception as e:
+                logging.error(
+                    self.name +
+                    " in parse_item: url=" +
+                    response.request.url +
+                    ", exception=" +
+                    e.__str__())
+                logging.exception(e)
+            yield item

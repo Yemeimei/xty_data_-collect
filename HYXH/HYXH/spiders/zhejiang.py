@@ -14,7 +14,7 @@ from HYXH.util_custom.tools.attachment import get_attachments, get_times
 class HySpider(CrawlSpider):
     name = 'zhejiang'
     allowed_domains = ['www.zrcma.org.cn']
-    start_urls = ['http://www.zrcma.org.cn/information/54/1.html','http://www.zrcma.org.cn/information/54/2.html']
+    start_urls = ['http://www.zrcma.org.cn/information/54/1.html', 'http://www.zrcma.org.cn/information/54/2.html']
     custom_settings = {
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
@@ -82,18 +82,19 @@ class HySpider(CrawlSpider):
                 break
             if not content:
                 logging.warning(f'{response.url}' + '当前url无 css 适配未提取 centent')
-        item['title'] = title
-        appendix, appendix_name = get_attachments(response)
-        item['appendix'] = appendix
-        item['source'] = '浙江省轨道交通建设与管理协会'
-        item['website'] =  '浙江省轨道交通建设与管理协会'
-        item['link'] = lyurl
-        item['appendix_name'] = appendix_name
-        item['type'] = 1
-        item['tags'] = ''
-        item['time'] = time
-        item['content'] = content
-        item['txt'] = txt
-        item['spider_name'] = 'zhejiang'
-        item['module_name'] = '行业协会'
-        yield item
+        if content:
+            item['title'] = title
+            appendix, appendix_name = get_attachments(response)
+            item['appendix'] = appendix
+            item['source'] = '浙江省轨道交通建设与管理协会'
+            item['website'] =  '浙江省轨道交通建设与管理协会'
+            item['link'] = lyurl
+            item['appendix_name'] = appendix_name
+            item['type'] = 1
+            item['tags'] = ''
+            item['time'] = time
+            item['content'] = content
+            item['txt'] = txt
+            item['spider_name'] = 'zhejiang'
+            item['module_name'] = '行业协会'
+            yield item

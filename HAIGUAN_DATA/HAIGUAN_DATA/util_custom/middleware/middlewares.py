@@ -53,7 +53,6 @@ class WangyiproDownloaderMiddleware(object):
     #拦截所有的响应对象
     def process_response(self, request,response, spider):
         if response.status == 412:
-            print(response.status)
             response.status = 209
         return response
 
