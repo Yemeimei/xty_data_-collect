@@ -67,7 +67,7 @@ class SohuAutoSpider(CrawlSpider):
         # },
         # # 去重/api端口
         # 'DUPEFILTER_CLASS': 'scrapy_splash.SplashAwareDupeFilter',
-        # # # 'SPLASH_URL': "http://10.8.32.122:8050/"
+        # 'SPLASH_URL': "http://10.8.32.122:8050/"
         # 'SPLASH_URL': "http://127.0.0.1:8050/"
     }
 
@@ -91,15 +91,9 @@ class SohuAutoSpider(CrawlSpider):
         driver.quit()
         url_export = list(set(url_export))
         for url in url_export:
-            url  = 'https:'+url
-            yield scrapy.Request(url,callback=self.parse_item,dont_filter=True)
+            url = 'https:'+url
+            yield scrapy.Request(url, callback=self.parse_item, dont_filter=True)
 
-
-
-
-    # def parse(self, response):
-    #     resp =response
-    #     print(type(resp))
 
     def parse_item(self, response):
         item = HyNewsItem()
