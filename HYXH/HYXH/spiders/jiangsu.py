@@ -21,7 +21,7 @@ class HySpider(CrawlSpider):
         # 并发请求
         'CONCURRENT_REQUESTS': 10,
         # 'CONCURRENT_REQUESTS_PER_DOMAIN': 1000000000,
-        'CONCURRENT_REQUESTS_PER_IP':0,
+        'CONCURRENT_REQUESTS_PER_IP': 0,
         # 下载暂停
         'DOWNLOAD_DELAY': 0.5,
         'ITEM_PIPELINES': {
@@ -89,7 +89,7 @@ class HySpider(CrawlSpider):
             appendix, appendix_name = get_attachments(response)
             item['appendix'] = appendix
             item['source'] = '江苏省新材料产业协会'
-            item['website'] =  '江苏省新材料产业协会'
+            item['website'] = '江苏省新材料产业协会'
             item['link'] = lyurl
             item['appendix_name'] = appendix_name
             item['type'] = 1

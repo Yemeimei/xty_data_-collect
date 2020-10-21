@@ -4,6 +4,7 @@ import time
 
 import requests
 
+
 def get_category(content):
     url = "http://39.96.199.128:9000/article/analysis"
     text = {
