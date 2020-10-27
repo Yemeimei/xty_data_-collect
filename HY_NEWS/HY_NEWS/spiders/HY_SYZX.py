@@ -61,7 +61,7 @@ class SYZXSpider(CrawlSpider):
 
     def parse(self, response):
         for d in response.css('.zxwk_li li'):
-            url = d.css('.zxwk_mian_glywh_a::attr(href)').extract_first()
+            url = response.urljoin(d.css('.zxwk_mian_glywh_a::attr(href)').extract_first())
             yield scrapy.Request(response.urljoin(url), callback=self.parse_item, dont_filter=True)
 
     def parse_item(self, response):
